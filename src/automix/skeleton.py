@@ -23,6 +23,10 @@ References:
 import argparse
 import logging
 import sys
+import yaml
+import os
+
+from .automix import Automix
 
 from automix import __version__
 
@@ -31,30 +35,6 @@ __copyright__ = "Sebastian Krüger"
 __license__ = "MIT"
 
 _logger = logging.getLogger(__name__)
-
-
-# ---- Python API ----
-# The functions defined in this section can be imported by users in their
-# Python scripts/interactive interpreter, e.g. via
-# `from automix.skeleton import fib`,
-# when using this Python module as a library.
-
-
-def fib(n):
-    """Fibonacci example function
-
-    Args:
-      n (int): integer
-
-    Returns:
-      int: n-th Fibonacci number
-    """
-    assert n > 0
-    a, b = 1, 1
-    for _i in range(n - 1):
-        a, b = b, a + b
-    return a
-
 
 # ---- CLI ----
 # The functions defined in this section are wrappers around the main Python
@@ -72,13 +52,12 @@ def parse_args(args):
     Returns:
       :obj:`argparse.Namespace`: command line parameters namespace
     """
-    parser = argparse.ArgumentParser(description="Just a Fibonacci demonstration")
+    parser = argparse.ArgumentParser(description="Automcatic mix of audio clips")
     parser.add_argument(
         "--version",
         action="version",
         version=f"automix {__version__}",
     )
-    parser.add_argument(dest="n", help="n-th Fibonacci number", type=int, metavar="INT")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -95,6 +74,14 @@ def parse_args(args):
         action="store_const",
         const=logging.DEBUG,
     )
+
+    parser.add_argument("definition", help="Automix definition file", nargs="?",
+                        default=os.path.join(os.getcwd(), "automix.yml"))
+
+    parser.add_argument("-o", "--output", help="Automix output audio file")
+    parser.add_argument(
+        "-y", "--yes", help="Overwrite output files without asking.", action='store_true')
+
     return parser.parse_args(args)
 
 
@@ -111,20 +98,25 @@ def setup_logging(loglevel):
 
 
 def main(args):
-    """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion
+    """Wrapper allowing :func:`automix` to be called with string arguments in a CLI fashion
 
-    Instead of returning the value from :func:`fib`, it prints the result to the
+    Instead of returning the value from :func:`automix`, it prints the result to the
     ``stdout`` in a nicely formatted message.
 
     Args:
       args (List[str]): command line parameters as list of strings
-          (for example  ``["--verbose", "42"]``).
+          (for example  ``["--verbose"]``).
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
-    _logger.debug("Starting crazy calculations...")
-    print(f"The {args.n}-th Fibonacci number is {fib(args.n)}")
-    _logger.info("Script ends here")
+    _logger.info("Starting automix")
+
+    with open(args.definition) as f:
+        definition = yaml.safe_load(f)
+
+    Automix(definition, args.output, args.yes).run()
+
+    _logger.info("Done automix")
 
 
 def run():
@@ -140,10 +132,4 @@ if __name__ == "__main__":
     #    being executed in the case someone imports this file instead of
     #    executing it as a script.
     #    https://docs.python.org/3/library/__main__.html
-
-    # After installing your project with pip, users can also run your Python
-    # modules as scripts via the ``-m`` flag, as defined in PEP 338::
-    #
-    #     python -m automix.skeleton 42
-    #
     run()

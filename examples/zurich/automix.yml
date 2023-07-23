@@ -1,0 +1,51 @@
+name: Zurich
+clips:
+  - 
+    name: backbeat
+    path: ./clips/backbeat.wav
+  - name: kick
+    path: ./clips/kick.wav
+  - name: hihat
+    path: ./clips/hihat.wav
+  - name: snare
+    path: ./clips/snare.wav
+  - name: lead
+    path: ./clips/lead.wav
+  - name: pad
+    path: ./clips/pad.wav
+  - name: keys
+    path: ./clips/keys.wav
+mix:
+  -
+    name: intro0
+    clips:
+      - name: backbeat
+        weight: 1
+        loop: 8
+        filters:
+          - name: lowpass
+            frequency: 300
+      - name: backbeat
+        weight: 1
+        loop: 8
+        filters:
+          - name: highpass
+            frequency: 300
+          - name: fade
+            type: in
+            curve: tri
+      - name: kick
+        weight: 1
+        loop: 8
+  -
+    name: intro1
+    clips:
+      - name: backbeat
+        weight: 1
+        loop: 8
+      - name: kick
+        weight: 1
+        loop: 8
+      - name: hihat
+        weight: 1
+        loop: 8

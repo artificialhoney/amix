@@ -33,17 +33,24 @@
 automix
 =======
 
-
-    Add a short description here!
-
-
-A longer description of your project goes here...
+Automatic mix of audio clips.
 
 
-.. _pyscaffold-notes:
+------------
+Installation
+------------
 
-Note
-====
+Make sure, to have **ffmpeg** installed.
 
-This project has been set up using PyScaffold 4.5. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+.. code-block::
+
+    pip install -r requirements.txt
+
+
+-----
+Usage
+-----
+
+.. code-block::
+
+    cd examples/zurich && automix

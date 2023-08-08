@@ -3,18 +3,25 @@ clips:
   - 
     name: backbeat
     path: ./clips/backbeat.wav
+    bars: 2
   - name: kick
     path: ./clips/kick.wav
+    bars: 2
   - name: hihat
     path: ./clips/hihat.wav
+    bars: 2
   - name: snare
     path: ./clips/snare.wav
+    bars: 2
   - name: lead
     path: ./clips/lead.wav
+    bars: 2
   - name: pad
     path: ./clips/pad.wav
+    bars: 2
   - name: keys
     path: ./clips/keys.wav
+    bars: 2
 mix:
   -
     name: intro0
@@ -23,29 +30,26 @@ mix:
         weight: 1
         loop: 8
         filters:
-          - name: lowpass
-            frequency: 300
-      - name: backbeat
-        weight: 1
-        loop: 8
-        filters:
-          - name: highpass
-            frequency: 300
-          - name: fade
-            type: in
-            curve: tri
-      - name: kick
-        weight: 1
-        loop: 8
+          - name: volume
+            volume: 0
+            from: 15.75
+            to: 16
   -
     name: intro1
     clips:
       - name: backbeat
         weight: 1
         loop: 8
+        filters:
+          - name: volume
+            volume: 0
+            from: 15.75
+            to: 16
       - name: kick
         weight: 1
         loop: 8
-      - name: hihat
-        weight: 1
-        loop: 8
+        filters:
+          - name: volume
+            volume: 0
+            from: 15.75
+            to: 16

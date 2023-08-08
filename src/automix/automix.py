@@ -9,9 +9,10 @@ _logger = logging.getLogger(__name__)
 
 
 class Clip():
-    def __init__(self, name, path):
+    def __init__(self, name, path, bars):
         self.name = name
         self.path = path
+        self.bars = bars
 
     def load(self):
         file = os.path.realpath(self.path)
@@ -38,7 +39,7 @@ class Automix():
         _logger.info("Loading clips")
         self.clips = {}
         for c in self.definition["clips"]:
-            clip = Clip(c["name"], c["path"])
+            clip = Clip(c["name"], c["path"], c["bars"])
             clip.load()
             self.clips[clip.name] = clip
 
@@ -66,15 +67,32 @@ class Automix():
 
                 if "filters" in definition:
                     for filter in definition["filters"]:
+
+                        if "from" in filter:
+                            enable_from = float(filter["from"])
+                            enable_to = float(filter["to"]) if "to" in filter else None
+
+                            if enable_to:
+                                enable = "between(t,{0},{1})".format(
+                                    enable_from * clip_time / c.bars, enable_to * clip_time / c.bars)
+                            else:
+                                enable = "gte(t,{0})".format(
+                                    enable_from * clip_time / c.bars)
+                        else:
+                            enable = None
+
                         if filter["name"] == "fade":
                             clip = ffmpeg.filter(
                                 clip, 'afade', filter["type"], duration=clip_length, curve=filter["curve"])
                         elif filter["name"] == "lowpass":
                             clip = ffmpeg.filter(
-                                clip, 'lowpass', frequency=float(filter["frequency"]))
+                                clip, 'lowpass', frequency=float(filter["frequency"]), enable=enable)
                         elif filter["name"] == "highpass":
                             clip = ffmpeg.filter(
-                                clip, 'highpass', frequency=float(filter["frequency"]))
+                                clip, 'highpass', frequency=float(filter["frequency"]), enable=enable)
+                        elif filter["name"] == "volume":
+                            clip = ffmpeg.filter(
+                                clip, 'volume', volume=float(filter["volume"]), enable=enable)
 
                 clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_length)
 

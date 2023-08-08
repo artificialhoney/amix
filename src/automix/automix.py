@@ -43,6 +43,42 @@ class Automix():
             clip.load()
             self.clips[clip.name] = clip
 
+    def parse_filter(self, filter, bar_time):
+        if "from" in filter:
+            enable_from = float(filter["from"])
+            enable_to = float(filter["to"]) if "to" in filter else None
+
+            if enable_to:
+                enable = "between(t,{0},{1})".format(
+                    enable_from * bar_time, enable_to * bar_time)
+            else:
+                enable = "gte(t,{0})".format(
+                    enable_from * bar_time)
+        else:
+            enable = None
+
+        kwargs = dict(enable=enable)
+        filter_name = filter["name"]
+
+        if filter_name == "fade":
+            kwargs["start_time"] = float(
+                filter["start_time"]) * bar_time
+            kwargs["duration"] = float(filter["duration"]) * bar_time
+            kwargs["curve"] = filter["curve"] if "curve" in filter else "tri"
+            kwargs["type"] = filter["type"]
+            filter_name = "afade"
+        elif filter_name == "lowpass":
+            kwargs["frequency"] = int(filter["frequency"])
+        elif filter_name == "highpass":
+            kwargs["frequency"] = int(filter["frequency"])
+        elif filter_name == "volume":
+            kwargs["volume"] = float(filter["volume"])
+        elif "filters" in self.definition and filter_name in self.definition["filters"]:
+            filter_name, kwargs = self.parse_filter(
+                self.definition["filters"][filter_name], bar_time)
+
+        return filter_name, kwargs
+
     def create_mix_parts(self):
         _logger.info("Creating mix parts")
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
@@ -57,7 +93,6 @@ class Automix():
                 clip_time = float(c.probe["duration"])
                 bar_time = clip_time / c.bars
                 sample_rate = int(c.probe["sample_rate"])
-                clip_length = clip_time * loop
                 hash = random.getrandbits(128)
 
                 tmp_filename = os.path.join(self.tmp_dir, "%032x.wav" % hash)
@@ -69,39 +104,9 @@ class Automix():
 
                 if "filters" in definition:
                     for filter in definition["filters"]:
-
-                        if "from" in filter:
-                            enable_from = float(filter["from"])
-                            enable_to = float(filter["to"]) if "to" in filter else None
-
-                            if enable_to:
-                                enable = "between(t,{0},{1})".format(
-                                    enable_from * bar_time, enable_to * bar_time)
-                            else:
-                                enable = "gte(t,{0})".format(
-                                    enable_from * bar_time)
-                        else:
-                            enable = None
-
-                        kwargs = dict(enable=enable)
-                        filter_name = filter["name"]
-
-                        if filter_name == "fade":
-                            kwargs["start_time"] = float(
-                                filter["start_time"]) * bar_time
-                            kwargs["duration"] = float(filter["duration"]) * bar_time
-                            kwargs["curve"] = filter["curve"] if "curve" in filter else "tri"
-                            kwargs["type"] = filter["type"]
-                            filter_name = "afade"
-                        elif filter_name == "lowpass":
-                            kwargs["frequency"] = int(filter["frequency"])
-                        elif filter_name == "highpass":
-                            kwargs["frequency"] = int(filter["frequency"])
-                        elif filter_name == "volume":
-                            kwargs["volume"] = float(filter["volume"])
-
-                    clip = ffmpeg.filter(
-                        clip, filter_name, **{k: v for k, v in kwargs.items() if v is not None})
+                        filter_name, kwargs = self.parse_filter(filter, bar_time)
+                        clip = ffmpeg.filter(
+                            clip, filter_name, **{k: v for k, v in kwargs.items() if v is not None})
 
                 clips.append({"definition": definition, "clip": clip})
 

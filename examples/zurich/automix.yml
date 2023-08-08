@@ -25,6 +25,12 @@ clips:
   - name: keys
     path: ./clips/keys.wav
     bars: 2
+filters:
+  volume_cut:
+    name: volume
+    volume: 0
+    from: 15.7
+    to: 16
 mix:
   -
     name: intro0
@@ -33,10 +39,7 @@ mix:
         weight: 1
         loop: 7
         filters:
-          - name: volume
-            volume: 0
-            from: 15.7
-            to: 16
+          - name: volume_cut
   -
     name: intro1
     clips:
@@ -44,26 +47,17 @@ mix:
         weight: 1
         loop: 7
         filters:
-          - name: volume
-            volume: 0
-            from: 15.8
-            to: 16
+          - name: volume_cut
       - name: kick
         weight: 1
         loop: 7
         filters:
-          - name: volume
-            volume: 0
-            from: 15.8
-            to: 16
+          - name: volume_cut
       - name: bass
         weight: 1
         loop: 7
         filters:
-          - name: volume
-            volume: 0
-            from: 15.8
-            to: 16
+          - name: volume_cut
   -
     name: intro2
     clips:
@@ -73,18 +67,6 @@ mix:
       - name: kick
         weight: 1
         loop: 7
-      - name: hihat
-        weight: 1
-        loop: 7
-        filters:
-          - name: highpass
-            frequency: 1500
-            from: 15
-            to: 1
-          - name: fade
-            type: in
-            start_time: 15
-            duration: 1
       - name: hihat
         weight: 1
         loop: 7
@@ -100,6 +82,29 @@ mix:
       - name: backbeat
         weight: 1
         loop: 7
+        filters:
+          - name: volume_cut
+      - name: kick
+        weight: 1
+        loop: 7
+        filters:
+          - name: volume_cut
+      - name: hihat
+        weight: 1
+        loop: 7
+        filters:
+          - name: volume_cut
+      - name: bass
+        weight: 1
+        loop: 7
+        filters:
+          - name: volume_cut
+  -
+    name: intro4
+    clips:
+      - name: backbeat
+        weight: 1
+        loop: 7
       - name: kick
         weight: 1
         loop: 7
@@ -109,3 +114,12 @@ mix:
       - name: bass
         weight: 1
         loop: 7
+      - name: lead
+        weight: 1
+        loop: 7
+        filters:
+          - name: fade
+            type: in
+            curve: esin
+            start_time: 0
+            duration: 16

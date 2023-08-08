@@ -28,7 +28,7 @@ mix:
     clips:
       - name: backbeat
         weight: 1
-        loop: 8
+        loop: 7
         filters:
           - name: volume
             volume: 0
@@ -39,7 +39,7 @@ mix:
     clips:
       - name: backbeat
         weight: 1
-        loop: 8
+        loop: 7
         filters:
           - name: volume
             volume: 0
@@ -47,9 +47,45 @@ mix:
             to: 16
       - name: kick
         weight: 1
-        loop: 8
+        loop: 7
         filters:
           - name: volume
             volume: 0
             from: 15.75
             to: 16
+  -
+    name: intro2
+    clips:
+      - name: backbeat
+        weight: 1
+        loop: 7
+      - name: kick
+        weight: 1
+        loop: 7
+      - name: hihat
+        weight: 1
+        loop: 7
+        filters:
+          - name: highpass
+            frequency: 3000
+          - name: fade
+            type: in
+            curve: tri
+      - name: hihat
+        weight: 1
+        loop: 7
+        filters:
+          - name: lowpass
+            frequency: 3000
+  -
+    name: intro3
+    clips:
+      - name: backbeat
+        weight: 1
+        loop: 7
+      - name: kick
+        weight: 1
+        loop: 7
+      - name: hihat
+        weight: 1
+        loop: 7

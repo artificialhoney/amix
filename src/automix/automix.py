@@ -55,6 +55,7 @@ class Automix():
                 c = self.clips[definition["name"]]
                 loop = definition["loop"] if "loop" in definition else 1
                 clip_time = float(c.probe["duration"])
+                bar_time = clip_time / c.bars
                 sample_rate = int(c.probe["sample_rate"])
                 clip_length = clip_time * loop
                 hash = random.getrandbits(128)
@@ -62,6 +63,7 @@ class Automix():
                 tmp_filename = os.path.join(self.tmp_dir, "%032x.wav" % hash)
                 c.input.output(tmp_filename).run()
                 clip = ffmpeg.input(tmp_filename)
+                clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_time)
                 clip = ffmpeg.filter(clip, "aloop", loop=loop,
                                      size=sample_rate * clip_time)
 
@@ -74,27 +76,34 @@ class Automix():
 
                             if enable_to:
                                 enable = "between(t,{0},{1})".format(
-                                    enable_from * clip_time / c.bars, enable_to * clip_time / c.bars)
+                                    enable_from * bar_time, enable_to * bar_time)
                             else:
+                                print("Anus " + str(enable_from * bar_time))
                                 enable = "gte(t,{0})".format(
-                                    enable_from * clip_time / c.bars)
+                                    enable_from * bar_time)
                         else:
                             enable = None
 
-                        if filter["name"] == "fade":
-                            clip = ffmpeg.filter(
-                                clip, 'afade', filter["type"], duration=clip_length, curve=filter["curve"])
-                        elif filter["name"] == "lowpass":
-                            clip = ffmpeg.filter(
-                                clip, 'lowpass', frequency=float(filter["frequency"]), enable=enable)
-                        elif filter["name"] == "highpass":
-                            clip = ffmpeg.filter(
-                                clip, 'highpass', frequency=float(filter["frequency"]), enable=enable)
-                        elif filter["name"] == "volume":
-                            clip = ffmpeg.filter(
-                                clip, 'volume', volume=float(filter["volume"]), enable=enable)
+                        kwargs = dict(enable=enable)
+                        filter_name = filter["name"]
 
-                clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_length)
+                        if filter_name == "fade":
+                            kwargs["start_time"] = enable_from * \
+                                bar_time if enable_from else 0
+                            kwargs["duration"] = enable_to * \
+                                bar_time if enable_to else clip_length
+                            kwargs["curve"] = filter["curve"]
+                            kwargs["type"] = filter["type"]
+                            filter_name = "afade"
+                        elif filter_name == "lowpass":
+                            kwargs["frequency"] = float(filter["frequency"])
+                        elif filter_name == "highpass":
+                            kwargs["frequency"] = float(filter["frequency"])
+                        elif filter_name == "volume":
+                            kwargs["volume"] = float(filter["volume"])
+
+                    clip = ffmpeg.filter(
+                        clip, filter_name, **{k: v for k, v in kwargs.items() if v is not None})
 
                 clips.append({"definition": definition, "clip": clip})
 
@@ -116,8 +125,8 @@ class Automix():
 
     def create_mix(self):
         _logger.info('Creating mix for "{0}"'.format(self.definition["name"]))
-        self.mix = ffmpeg.filter(
-            [x for x in self.mix_parts.values()], 'concat', n=2, v=0, a=1)
+        segments = [x for x in self.mix_parts.values()]
+        self.mix = ffmpeg.filter(segments, 'concat', n=len(segments), v=0, a=1)
         tempo = self.definition.get("tempo", 1)
         pitch = self.definition.get("pitch", 1)
         if tempo != 1 or pitch != 1:

@@ -91,7 +91,7 @@ def setup_logging(loglevel):
     Args:
       loglevel (int): minimum loglevel for emitting messages
     """
-    logformat = "[%(asctime)s] %(levelname)s:%(name)s:%(message)s"
+    logformat = "[%(asctime)s] %(levelname)s - %(name)s - %(message)s"
     logging.basicConfig(
         level=loglevel, stream=sys.stdout, format=logformat, datefmt="%Y-%m-%d %H:%M:%S"
     )
@@ -114,7 +114,7 @@ def main(args):
     with open(args.definition) as f:
         definition = yaml.safe_load(f)
 
-    Automix(definition, args.output, args.yes).run()
+    Automix(definition, args.output, args.yes, args.loglevel).run()
 
     _logger.info("Done automix")
 

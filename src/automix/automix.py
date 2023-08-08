@@ -24,7 +24,7 @@ class Clip():
 
 
 class Automix():
-    def __init__(self, definition, output=None, overwrite_output=False):
+    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
         self.definition = definition
         self.mix_dir = os.path.join(os.getcwd(), "mix")
         self.tmp_dir = os.path.join(self.mix_dir, "tmp")
@@ -34,6 +34,12 @@ class Automix():
         else:
             self.output = os.path.realpath(output)
         self.overwrite_output = overwrite_output
+        if loglevel == logging.DEBUG:
+            self.loglevel = 'debug'
+        elif loglevel == logging.INFO:
+            self.loglevel = 'info'
+        else:
+            self.loglevel = 'error'
 
     def load_clips(self):
         _logger.info("Loading clips")
@@ -96,7 +102,7 @@ class Automix():
                 hash = random.getrandbits(128)
 
                 tmp_filename = os.path.join(self.tmp_dir, "%032x.wav" % hash)
-                c.input.output(tmp_filename).run()
+                c.input.output(tmp_filename, loglevel=self.loglevel).run()
                 clip = ffmpeg.input(tmp_filename)
                 clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_time)
                 clip = ffmpeg.filter(clip, "aloop", loop=loop,
@@ -119,7 +125,7 @@ class Automix():
             _logger.info(
                 'Creating temporary file "{0}" for part "{1}"'.format(part["name"], filename))
             ffmpeg.filter([x["clip"] for x in clips], 'amix', weights=weights,
-                          inputs=len(clips), normalize=False).output(filename).run(overwrite_output=self.overwrite_output)
+                          inputs=len(clips), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
             self.mix_parts[part["name"]] = ffmpeg.input(filename)
 
     def setup(self):
@@ -138,7 +144,8 @@ class Automix():
 
     def render_mix(self):
         _logger.info('Rendering mix to "{0}"'.format(self.output))
-        self.mix.output(self.output).run(overwrite_output=self.overwrite_output)
+        self.mix.output(self.output, loglevel=self.loglevel).run(
+            overwrite_output=self.overwrite_output)
 
     def cleanup(self):
         _logger.info("Cleaning up")

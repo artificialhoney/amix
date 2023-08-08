@@ -78,7 +78,6 @@ class Automix():
                                 enable = "between(t,{0},{1})".format(
                                     enable_from * bar_time, enable_to * bar_time)
                             else:
-                                print("Anus " + str(enable_from * bar_time))
                                 enable = "gte(t,{0})".format(
                                     enable_from * bar_time)
                         else:
@@ -96,9 +95,9 @@ class Automix():
                             kwargs["type"] = filter["type"]
                             filter_name = "afade"
                         elif filter_name == "lowpass":
-                            kwargs["frequency"] = float(filter["frequency"])
+                            kwargs["frequency"] = int(filter["frequency"])
                         elif filter_name == "highpass":
-                            kwargs["frequency"] = float(filter["frequency"])
+                            kwargs["frequency"] = int(filter["frequency"])
                         elif filter_name == "volume":
                             kwargs["volume"] = float(filter["volume"])
 
@@ -115,7 +114,7 @@ class Automix():
             _logger.info(
                 'Creating temporary file "{0}" for part "{1}"'.format(part["name"], filename))
             ffmpeg.filter([x["clip"] for x in clips], 'amix', weights=weights,
-                          inputs=len(clips)).output(filename).run(overwrite_output=self.overwrite_output)
+                          inputs=len(clips), normalize=False).output(filename).run(overwrite_output=self.overwrite_output)
             self.mix_parts[part["name"]] = ffmpeg.input(filename)
 
     def setup(self):

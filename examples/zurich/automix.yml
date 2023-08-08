@@ -32,7 +32,7 @@ mix:
         filters:
           - name: volume
             volume: 0
-            from: 15.75
+            from: 15.7
             to: 16
   -
     name: intro1
@@ -43,7 +43,7 @@ mix:
         filters:
           - name: volume
             volume: 0
-            from: 15.75
+            from: 15.8
             to: 16
       - name: kick
         weight: 1
@@ -51,7 +51,7 @@ mix:
         filters:
           - name: volume
             volume: 0
-            from: 15.75
+            from: 15.8
             to: 16
   -
     name: intro2
@@ -62,15 +62,6 @@ mix:
       - name: kick
         weight: 1
         loop: 7
-      - name: hihat
-        weight: 1
-        loop: 7
-        filters:
-          - name: highpass
-            frequency: 3000
-          - name: fade
-            type: in
-            curve: tri
       - name: hihat
         weight: 1
         loop: 7

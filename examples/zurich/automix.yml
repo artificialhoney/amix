@@ -31,6 +31,18 @@ filters:
     volume: 0
     from: 15.7
     to: 16
+  fade_in:
+    name: fade
+    type: in
+    curve: tri
+    start_time: 0
+    duration: 16
+  fade_out:
+    name: fade
+    type: out
+    curve: tri
+    start_time: 0
+    duration: 16
 mix:
   -
     name: intro0
@@ -82,16 +94,18 @@ mix:
     bars: 16
     clips:
       - name: backbeat
+        filters:
+          - name: volume_cut
       - name: kick
+        filters:
+          - name: volume_cut
       - name: hihat
+        filters:
+          - name: volume_cut
       - name: bass
       - name: lead
         filters:
-          - name: fade
-            type: in
-            curve: esin
-            start_time: 0
-            duration: 16
+          - name: fade_in
   -
     name: main1
     bars: 16
@@ -103,13 +117,19 @@ mix:
       - name: lead
       - name: pad
         filters:
-          - name: fade
-            type: in
-            curve: esin
-            start_time: 0
-            duration: 16
+          - name: fade_in
   -
     name: main2
+    bars: 16
+    clips:
+      - name: backbeat
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+  -
+    name: main3
     bars: 16
     clips:
       - name: backbeat
@@ -124,8 +144,9 @@ mix:
       - name: bass
       - name: lead
       - name: pad
+      - name: keys
   -
-    name: main3
+    name: main4
     bars: 16
     clips:
       - name: backbeat
@@ -135,3 +156,58 @@ mix:
       - name: lead
       - name: pad
       - name: keys
+      - name: snare
+  -
+    name: main5
+    bars: 16
+    clips:
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+      - name: keys
+      - name: snare
+  -
+    name: outro0
+    bars: 16
+    clips:
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+      - name: keys
+  -
+    name: outro1
+    bars: 16
+    clips:
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+  -
+    name: outro2
+    bars: 16
+    clips:
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+  -
+    name: outro3
+    bars: 16
+    clips:
+      - name: kick
+        filters:
+          - name: fade_out
+      - name: hihat
+        filters:
+          - name: fade_out
+      - name: bass
+        filters:
+          - name: fade_out
+      - name: lead
+        filters:
+          - name: fade_out

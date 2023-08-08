@@ -34,92 +34,104 @@ filters:
 mix:
   -
     name: intro0
+    bars: 16
     clips:
       - name: backbeat
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
   -
     name: intro1
+    bars: 16
     clips:
       - name: backbeat
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
       - name: kick
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
       - name: bass
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
   -
     name: intro2
+    bars: 16
     clips:
       - name: backbeat
-        weight: 1
-        loop: 7
       - name: kick
-        weight: 1
-        loop: 7
       - name: hihat
-        weight: 1
-        loop: 7
         filters:
           - name: lowpass
             frequency: 1500
       - name: bass
-        weight: 1
-        loop: 7
   -
     name: intro3
+    bars: 16
     clips:
       - name: backbeat
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
       - name: kick
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
       - name: hihat
-        weight: 1
-        loop: 7
         filters:
           - name: volume_cut
       - name: bass
-        weight: 1
-        loop: 7
-        filters:
-          - name: volume_cut
   -
-    name: intro4
+    name: main0
+    bars: 16
     clips:
       - name: backbeat
-        weight: 1
-        loop: 7
       - name: kick
-        weight: 1
-        loop: 7
       - name: hihat
-        weight: 1
-        loop: 7
       - name: bass
-        weight: 1
-        loop: 7
       - name: lead
-        weight: 1
-        loop: 7
         filters:
           - name: fade
             type: in
             curve: esin
             start_time: 0
             duration: 16
+  -
+    name: main1
+    bars: 16
+    clips:
+      - name: backbeat
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+        filters:
+          - name: fade
+            type: in
+            curve: esin
+            start_time: 0
+            duration: 16
+  -
+    name: main2
+    bars: 16
+    clips:
+      - name: backbeat
+        filters:
+          - name: volume_cut
+      - name: kick
+        filters:
+          - name: volume_cut
+      - name: hihat
+        filters:
+          - name: volume_cut
+      - name: bass
+      - name: lead
+      - name: pad
+  -
+    name: main3
+    bars: 16
+    clips:
+      - name: backbeat
+      - name: kick
+      - name: hihat
+      - name: bass
+      - name: lead
+      - name: pad
+      - name: keys

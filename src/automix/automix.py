@@ -89,7 +89,7 @@ class Automix():
             clips = []
             for definition in part["clips"]:
                 c = self.clips[definition["name"]]
-                loop = definition["loop"] if "loop" in definition else 1
+                loop = int(part["bars"]) / int(c.bars) - 1
                 clip_time = float(c.probe["duration"])
                 bar_time = clip_time / c.bars
                 sample_rate = int(c.probe["sample_rate"])
@@ -110,7 +110,8 @@ class Automix():
 
                 clips.append({"definition": definition, "clip": clip})
 
-            weights = " ".join([str(x["definition"]["weight"]) for x in clips])
+            weights = " ".join(
+                [str(x["definition"]["weight"] if "weight" in x["definition"] else "1") for x in clips])
             _logger.debug('Using {0} clips "{1}" with weights "{2}"'.format(
                 len(clips), [x["definition"]["name"] for x in clips], weights))
 

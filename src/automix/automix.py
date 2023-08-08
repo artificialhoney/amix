@@ -87,11 +87,10 @@ class Automix():
                         filter_name = filter["name"]
 
                         if filter_name == "fade":
-                            kwargs["start_time"] = enable_from * \
-                                bar_time if enable_from else 0
-                            kwargs["duration"] = enable_to * \
-                                bar_time if enable_to else clip_length
-                            kwargs["curve"] = filter["curve"]
+                            kwargs["start_time"] = float(
+                                filter["start_time"]) * bar_time
+                            kwargs["duration"] = float(filter["duration"]) * bar_time
+                            kwargs["curve"] = filter["curve"] if "curve" in filter else "tri"
                             kwargs["type"] = filter["type"]
                             filter_name = "afade"
                         elif filter_name == "lowpass":

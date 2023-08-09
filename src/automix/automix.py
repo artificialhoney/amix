@@ -85,12 +85,10 @@ class Automix():
 
         return filter_name, kwargs
 
-    def create_mix_parts(self):
-        _logger.info("Creating mix parts")
-        Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
-        Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
+    def create_mix_parts(self, name, definition):
+        _logger.info('Creating mix parts "{0}"'.format(name))
         self.mix_parts = {}
-        for part in self.definition["mix"]:
+        for part in definition:
             _logger.info('Creating mix part "{0}"'.format(part["name"]))
             clips = []
             for definition in part["clips"]:
@@ -126,17 +124,27 @@ class Automix():
                 'Creating temporary file "{0}" for part "{1}"'.format(part["name"], filename))
             ffmpeg.filter([x["clip"] for x in clips], 'amix', weights=weights,
                           inputs=len(clips), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
-            self.mix_parts[part["name"]] = ffmpeg.input(filename)
+            self.mix_parts[name] = self.mix_parts.get(name, {})
+            self.mix_parts[name][part["name"]] = ffmpeg.input(filename)
 
     def setup(self):
         _logger.info("Setting up automix")
         self.load_clips()
-        self.create_mix_parts()
+        Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
+        Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
+        for key in self.definition["mix"].keys():
+            self.create_mix_parts(key, self.definition["mix"][key])
 
     def create_mix(self):
         _logger.info('Creating mix for "{0}"'.format(self.definition["name"]))
-        segments = [x for x in self.mix_parts.values()]
-        self.mix = ffmpeg.filter(segments, 'concat', n=len(segments), v=0, a=1)
+        mixes = []
+        for key in self.mix_parts:
+            mix_parts = self.mix_parts[key]
+            segments = [x for x in mix_parts.values()]
+            mixes.append({"parts": mix_parts, "clip": ffmpeg.filter(
+                segments, 'concat', n=len(segments), v=0, a=1)})
+        self.mix = ffmpeg.filter([x["clip"] for x in mixes], 'amix',
+                                 inputs=len(mixes), normalize=False)
         tempo = self.definition.get("tempo", 1)
         pitch = self.definition.get("pitch", 1)
         if tempo != 1 or pitch != 1:

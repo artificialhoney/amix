@@ -1,0 +1,216 @@
+name: Stuttgart
+pitch: 1.1
+clips:
+  - 
+    name: backbeat
+    path: ./clips/backbeat.wav
+    bars: 8
+  - name: kick
+    path: ./clips/kick.wav
+    bars: 8
+  - name: hihat
+    path: ./clips/hihat.wav
+    bars: 8
+  - name: snare
+    path: ./clips/snare.wav
+    bars: 8
+  - name: clap
+    path: ./clips/clap.wav
+    bars: 8
+  - name: bass
+    path: ./clips/bass.wav
+    bars: 8
+  - name: lead
+    path: ./clips/lead.wav
+    bars: 8
+  - name: pad
+    path: ./clips/pad.wav
+    bars: 8
+  - name: beat
+    path: ./clips/beat.wav
+    bars: 8
+filters:
+  volume_cut:
+    name: volume
+    volume: 0
+    from: 15.7
+    to: 16
+  fade_in:
+    name: fade
+    type: in
+    curve: tri
+    start_time: 0
+    duration: 16
+  fade_out:
+    name: fade
+    type: out
+    curve: tri
+    start_time: 0
+    duration: 16
+mix:
+  beat:
+    -
+      name: main
+      bars: 208
+      clips:
+        - name: beat
+          filters:
+            - name: fade
+              type: out
+              curve: tri
+              start_time: 192
+              duration: 16
+            - name: volume
+              volume: 0
+              from: 0
+              to: 16
+  main:
+    -
+      name: intro1
+      bars: 16
+      clips:
+        - name: kick
+          filters:
+            - name: volume_cut
+        - name: bass
+          filters:
+            - name: volume_cut
+    -
+      name: intro2
+      bars: 16
+      clips:
+
+        - name: kick
+        - name: hihat
+          filters:
+            - name: lowpass
+              frequency: 1500
+        - name: bass
+    -
+      name: intro3
+      bars: 16
+      clips:
+        - name: kick
+          filters:
+            - name: volume_cut
+        - name: hihat
+          filters:
+            - name: volume_cut
+        - name: bass
+    -
+      name: main0
+      bars: 16
+      clips:
+        - name: kick
+          filters:
+            - name: volume_cut
+        - name: hihat
+          filters:
+            - name: volume_cut
+        - name: bass
+        - name: lead
+          filters:
+            - name: fade_in
+    -
+      name: main1
+      bars: 16
+      clips:
+
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+          filters:
+            - name: fade_in
+    -
+      name: main2
+      bars: 16
+      clips:
+
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+    -
+      name: main3
+      bars: 16
+      clips:
+        - name: kick
+          filters:
+            - name: volume_cut
+        - name: hihat
+          filters:
+            - name: volume_cut
+        - name: bass
+        - name: lead
+        - name: pad
+        - name: backbeat
+    -
+      name: main4
+      bars: 16
+      clips:
+
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+        - name: backbeat
+        - name: snare
+        - name: clap
+    -
+      name: main5
+      bars: 16
+      clips:
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+        - name: backbeat
+        - name: clap
+    -
+      name: outro0
+      bars: 16
+      clips:
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+        - name: backbeat
+    -
+      name: outro1
+      bars: 16
+      clips:
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+    -
+      name: outro2
+      bars: 16
+      clips:
+        - name: kick
+        - name: hihat
+        - name: bass
+        - name: lead
+    -
+      name: outro3
+      bars: 16
+      clips:
+        - name: kick
+          filters:
+            - name: fade_out
+        - name: hihat
+          filters:
+            - name: fade_out
+        - name: bass
+          filters:
+            - name: fade_out
+        - name: lead
+          filters:
+            - name: fade_out

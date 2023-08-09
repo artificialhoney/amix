@@ -3,6 +3,7 @@ import os
 import shutil
 import random
 from pathlib import Path
+import math
 import ffmpeg
 
 _logger = logging.getLogger(__name__)
@@ -96,9 +97,16 @@ class Automix():
             clips = []
             for definition in part["clips"]:
                 c = self.clips[definition["name"]]
-                clip_time = float(c.probe["duration"])
-                bars = clip_time / 60 * tempo / 4
-                bar_time = clip_time / bars
+                bar_time = (60 / tempo) * 4
+                bars_original = math.ceil(float(
+                    c.probe["duration"]) / bar_time)
+                diff = bars_original - part["bars"]
+                gcd = math.gcd(bars_original, part["bars"])
+                if diff < 0:
+                    bars = bars_original % part["bars"] - gcd
+                else:
+                    bars = part["bars"] % bars_original + gcd
+                clip_time = bars * bar_time
                 loop = int(part["bars"]) / int(bars) - 1
                 sample_rate = int(c.probe["sample_rate"])
                 hash = random.getrandbits(128)

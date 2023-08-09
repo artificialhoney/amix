@@ -1,0 +1,120 @@
+name: Berlin
+original_tempo: 140
+clips:
+  - name: kick
+    path: ./clips/kick.aif
+  - name: drums
+    path: ./clips/drums.aif
+  - name: break
+    path: ./clips/break.aif
+  - name: pad
+    path: ./clips/pad.aif
+  - name: keys
+    path: ./clips/keys.aif
+  - name: shaker
+    path: ./clips/shaker.aif
+  - name: bass
+    path: ./clips/bass.aif
+filters:
+  fade_in:
+    name: fade
+    type: in
+    curve: tri
+    start_time: 0
+    duration: 16
+  fade_out:
+    name: fade
+    type: out
+    curve: tri
+    start_time: 0
+    duration: 16
+mix:
+  main:
+    - name: intro0
+      bars: 16
+      clips:
+        - name: pad
+          filters:
+            - name: fade_in
+        - name: drums
+          filters:
+            - name: fade_in
+    - name: intro1
+      bars: 16
+      clips:
+        - name: pad
+        - name: drums
+    - name: intro2
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+    - name: intro3
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+        - name: keys
+          filters:
+            - name: fade_in
+    - name: main0
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+        - name: keys
+    - name: main1
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+
+    - name: main2
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+        - name: keys
+          filters:
+            - name: fade_out
+        - name: break
+    - name: main3
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+        - name: break
+    - name: outro0
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: drums
+        - name: shaker
+    - name: outro1
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+        - name: kick
+        - name: shaker
+    - name: outro2
+      bars: 16
+      clips:
+        - name: bass
+        - name: pad
+          filters:
+            - name: fade_out
+        - name: kick
+        - name: shaker
+    - name: outro3
+      bars: 10
+      clips:
+        - name: kick
+        - name: shaker

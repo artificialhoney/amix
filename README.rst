@@ -35,7 +35,6 @@ automix
 
 Automatic mix of audio clips.
 
-
 ------------
 Installation
 ------------
@@ -54,3 +53,12 @@ Usage
 .. code-block::
 
     cd examples/zurich && automix
+
+
+--------
+Examples
+--------
+
+All tracks in the `examples` folder were generated und uploaded to SoundCloud_.
+    
+.. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade

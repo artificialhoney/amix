@@ -1,25 +1,27 @@
-name: Stuttgart
+name: Frankfurt
 original_tempo: 140
-pitch: 1.101
+tempo: 0.985
 clips:
   - name: backbeat
     path: ./clips/backbeat.wav
   - name: kick
     path: ./clips/kick.wav
-  - name: hihat
-    path: ./clips/hihat.wav
-  - name: snare
-    path: ./clips/snare.wav
+  - name: hihat1
+    path: ./clips/hihat1.wav
+  - name: hihat2
+    path: ./clips/hihat2.wav
   - name: clap
     path: ./clips/clap.wav
   - name: bass
     path: ./clips/bass.wav
   - name: lead
     path: ./clips/lead.wav
+  - name: lead_flanged
+    path: ./clips/lead-flanged.wav
   - name: pad
     path: ./clips/pad.wav
-  - name: beat
-    path: ./clips/beat.wav
+  - name: pad_flanged
+    path: ./clips/pad-flanged.wav
 filters:
   volume_cut:
     name: volume
@@ -39,138 +41,137 @@ filters:
     start_time: 0
     duration: 16
 mix:
-  beat:
-    - name: main
-      bars: 208
-      clips:
-        - name: beat
-          filters:
-            - name: fade
-              type: out
-              curve: tri
-              start_time: 192
-              duration: 16
-            - name: volume
-              volume: 0
-              from: 0
-              to: 16
   main:
     - name: intro1
       bars: 16
       clips:
+        - name: hihat1
         - name: kick
         - name: bass
-
     - name: intro2
       bars: 16
       clips:
+        - name: hihat1
+        - name: hihat2
         - name: kick
-        - name: hihat
-          filters:
-            - name: lowpass
-              frequency: 1500
         - name: bass
     - name: intro3
       bars: 16
       clips:
+        - name: hihat1
+        - name: hihat2
         - name: kick
-        - name: hihat
         - name: bass
+        - name: lead
+          filters:
+            - name: fade_in
+        - name: pad
+          filters:
+            - name: fade_in
     - name: main0
       bars: 16
       clips:
+        - name: hihat1
+        - name: hihat2
+        - name: clap
         - name: kick
-        - name: hihat
         - name: bass
         - name: lead
-          filters:
-            - name: fade_in
+        - name: pad
+        - name: backbeat
     - name: main1
       bars: 16
       clips:
+        - name: hihat1
+        - name: clap
         - name: kick
-        - name: hihat
+        - name: bass
+        - name: lead
+        - name: pad
+        - name: backbeat
+    - name: main2
+      bars: 16
+      clips:
+        - name: hihat1
+        - name: clap
+        - name: kick
         - name: bass
         - name: lead
         - name: pad
           filters:
-            - name: fade_in
-    - name: main2
-      bars: 16
-      clips:
-        - name: kick
-        - name: hihat
-        - name: bass
-        - name: lead
-        - name: pad
+            - name: fade_out
+        - name: backbeat
     - name: main3
       bars: 16
       clips:
+        - name: hihat1
+        - name: clap
         - name: kick
-
-        - name: hihat
-
         - name: bass
         - name: lead
-        - name: pad
+          filters:
+            - name: fade_out
         - name: backbeat
     - name: main4
       bars: 16
       clips:
+        - name: hihat1
         - name: kick
-        - name: hihat
         - name: bass
-        - name: lead
-        - name: pad
         - name: backbeat
-        - name: snare
-        - name: clap
     - name: main5
       bars: 16
       clips:
+        - name: hihat1
         - name: kick
-        - name: hihat
         - name: bass
-        - name: lead
-        - name: pad
         - name: backbeat
-        - name: clap
+        - name: lead_flanged
+          filters:
+            - name: fade_in
+        - name: pad_flanged
+          filters:
+            - name: fade_in
+    - name: main6
+      bars: 16
+      clips:
+        - name: hihat1
+        - name: hihat2
+        - name: kick
+        - name: bass
+        - name: backbeat
+        - name: lead_flanged
+        - name: pad_flanged
     - name: outro0
       bars: 16
       clips:
+        - name: hihat1
+        - name: hihat2
         - name: kick
-        - name: hihat
         - name: bass
-        - name: lead
-        - name: pad
-        - name: backbeat
+        - name: lead_flanged
+        - name: pad_flanged
     - name: outro1
       bars: 16
       clips:
+        - name: hihat1
         - name: kick
-        - name: hihat
         - name: bass
-        - name: lead
-        - name: pad
+        - name: lead_flanged
+        - name: pad_flanged
     - name: outro2
       bars: 16
       clips:
         - name: kick
-        - name: hihat
         - name: bass
-        - name: lead
-    - name: outro3
+        - name: lead_flanged
+        - name: pad_flanged
+    - name: outro2
       bars: 16
       clips:
-        - name: kick
+        - name: lead_flanged
           filters:
             - name: fade_out
-        - name: hihat
-          filters:
-            - name: fade_out
-        - name: bass
-          filters:
-            - name: fade_out
-        - name: lead
+        - name: pad_flanged
           filters:
             - name: fade_out

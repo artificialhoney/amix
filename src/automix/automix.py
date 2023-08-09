@@ -9,10 +9,9 @@ _logger = logging.getLogger(__name__)
 
 
 class Clip():
-    def __init__(self, name, path, bars):
+    def __init__(self, name, path):
         self.name = name
         self.path = path
-        self.bars = bars
 
     def load(self):
         file = os.path.realpath(self.path)
@@ -45,7 +44,7 @@ class Automix():
         _logger.info("Loading clips")
         self.clips = {}
         for c in self.definition["clips"]:
-            clip = Clip(c["name"], c["path"], c["bars"])
+            clip = Clip(c["name"], c["path"])
             clip.load()
             self.clips[clip.name] = clip
 
@@ -79,13 +78,17 @@ class Automix():
             kwargs["frequency"] = int(filter["frequency"])
         elif filter_name == "volume":
             kwargs["volume"] = float(filter["volume"])
+        elif filter_name == "flanger":
+            kwargs["delay"] = float(filter["delay"])
         elif "filters" in self.definition and filter_name in self.definition["filters"]:
             filter_name, kwargs = self.parse_filter(
                 self.definition["filters"][filter_name], bar_time)
+        else:
+            raise Exception('Filter not found "{0}"'.format(filter_name))
 
         return filter_name, kwargs
 
-    def create_mix_parts(self, name, definition):
+    def create_mix_parts(self, name, definition, tempo):
         _logger.info('Creating mix parts "{0}"'.format(name))
         self.mix_parts = {}
         for part in definition:
@@ -93,9 +96,10 @@ class Automix():
             clips = []
             for definition in part["clips"]:
                 c = self.clips[definition["name"]]
-                loop = int(part["bars"]) / int(c.bars) - 1
                 clip_time = float(c.probe["duration"])
-                bar_time = clip_time / c.bars
+                bars = clip_time / 60 * tempo / 4
+                bar_time = clip_time / bars
+                loop = int(part["bars"]) / int(bars) - 1
                 sample_rate = int(c.probe["sample_rate"])
                 hash = random.getrandbits(128)
 
@@ -133,7 +137,8 @@ class Automix():
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
         Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
         for key in self.definition["mix"].keys():
-            self.create_mix_parts(key, self.definition["mix"][key])
+            self.create_mix_parts(
+                key, self.definition["mix"][key], self.definition["original_tempo"])
 
     def create_mix(self):
         _logger.info('Creating mix for "{0}"'.format(self.definition["name"]))

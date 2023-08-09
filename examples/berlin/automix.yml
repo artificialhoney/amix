@@ -72,24 +72,18 @@ mix:
         - name: bass
         - name: pad
         - name: drums
-
+        - name: keys
+        - name: shaker
     - name: main2
       bars: 16
       clips:
         - name: bass
         - name: pad
-        - name: drums
         - name: keys
           filters:
             - name: fade_out
-        - name: break
-    - name: main3
-      bars: 16
-      clips:
-        - name: bass
-        - name: pad
         - name: drums
-        - name: break
+        - name: shaker
     - name: outro0
       bars: 16
       clips:

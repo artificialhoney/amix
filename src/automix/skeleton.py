@@ -78,6 +78,8 @@ def parse_args(args):
     parser.add_argument("definition", help="Automix definition file", nargs="?",
                         default=os.path.join(os.getcwd(), "automix.yml"))
 
+    parser.add_argument("-c", "--clips", help="Automix input audio clips",
+                        nargs="*", default=[os.path.join(os.getcwd(), "clips")])
     parser.add_argument("-o", "--output", help="Automix output audio file")
     parser.add_argument(
         "-y", "--yes", help="Overwrite output files without asking.", action='store_true')
@@ -114,7 +116,7 @@ def main(args):
     with open(args.definition) as f:
         definition = yaml.safe_load(f)
 
-    Automix(definition, args.output, args.yes, args.loglevel).run()
+    Automix(definition, args.output, args.yes, args.loglevel, args.clips).run()
 
     _logger.info("Done automix")
 

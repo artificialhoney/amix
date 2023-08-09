@@ -1,0 +1,94 @@
+name: Mannheim
+original_tempo: 180
+filters:
+  fade_in:
+    name: fade
+    type: in
+    curve: tri
+    start_time: 0
+    duration: 16
+  fade_out:
+    name: fade
+    type: out
+    curve: tri
+    start_time: 0
+    duration: 16
+mix:
+  main:
+    - name: intro0
+      bars: 16
+      clips:
+        - name: pad
+          filters:
+            - name: fade_in
+        - name: drums
+          filters:
+            - name: fade_in
+    - name: intro1
+      bars: 16
+      clips:
+        - name: pad
+        - name: drums
+    - name: intro2
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: drums
+    - name: intro3
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: drums
+        - name: lead
+          filters:
+            - name: fade_in
+    - name: main0
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: drums
+        - name: lead
+    - name: main1
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: drums
+        - name: lead
+        - name: shaker
+    - name: main2
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: lead
+          filters:
+            - name: fade_out
+        - name: drums
+        - name: shaker
+    - name: outro0
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+        - name: drums
+        - name: shaker
+    - name: outro1
+      bars: 16
+      clips:
+        - name: bass0
+        - name: bass1
+        - name: pad
+          filters:
+            - name: fade_out
+        - name: drums
+        - name: shaker

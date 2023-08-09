@@ -1,5 +1,6 @@
 import logging
 import os
+import glob
 import shutil
 import random
 from pathlib import Path
@@ -24,7 +25,8 @@ class Clip():
 
 
 class Automix():
-    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
+    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None, files=[]):
+        self.files = files
         self.definition = definition
         self.mix_dir = os.path.join(os.getcwd(), "mix")
         self.tmp_dir = os.path.join(self.mix_dir, "tmp")
@@ -43,6 +45,35 @@ class Automix():
 
     def load_clips(self):
         _logger.info("Loading clips")
+
+        clips = []
+        types = ("*.mp3", "*.wav", "*.aif")
+
+        if self.files and len(self.files) > 0:
+            for file in self.files:
+                file = os.path.realpath(file)
+                if os.path.isdir(file):
+                    files_grabbed = []
+                    for t in types:
+                        files_grabbed.extend(glob.glob(os.path.join(file, t)))
+                    for f in files_grabbed:
+                        if os.path.isfile(f):
+                            path = f
+                            name = os.path.splitext(os.path.basename(f))[0]
+                            clips.append({"name": name, "path": path})
+                elif os.path.isfile(file):
+                    path = file
+                    name = os.path.splitext(os.path.basename(file))[0]
+                    clips.append({"name": name, "path": path})
+
+        if not "clips" in self.definition:
+            if len(clips) > 0:
+                self.definition["clips"] = clips
+            else:
+                self.definition["clips"] = []
+        elif len(clips) > 0:
+            self.definition["clips"] = self.definition["clips"] + clips
+
         self.clips = {}
         for c in self.definition["clips"]:
             clip = Clip(c["name"], c["path"])
@@ -96,18 +127,27 @@ class Automix():
             _logger.info('Creating mix part "{0}"'.format(part["name"]))
             clips = []
             for definition in part["clips"]:
+                if not definition["name"] in self.clips:
+                    continue
                 c = self.clips[definition["name"]]
                 bar_time = (60 / tempo) * 4
                 bars_original = math.ceil(float(
                     c.probe["duration"]) / bar_time)
-                diff = bars_original - part["bars"]
+                diff = part["bars"] - bars_original
                 gcd = math.gcd(bars_original, part["bars"])
-                if diff < 0:
-                    bars = bars_original % part["bars"] - gcd
+                if diff > 0:
+                    bars = bars_original
+
+                    while bars >= bars_original or (part["bars"] % bars) != 0:
+                        bars = bars - 1
+
                 else:
-                    bars = part["bars"] % bars_original + gcd
-                clip_time = bars * bar_time
+                    bars = int(part["bars"] % bars_original)
+
                 loop = int(part["bars"]) / int(bars) - 1
+
+                clip_time = bars * bar_time
+
                 sample_rate = int(c.probe["sample_rate"])
                 hash = random.getrandbits(128)
 

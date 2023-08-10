@@ -98,22 +98,29 @@ class Automix():
             for definition in part["clips"]:
                 if not definition["name"] in self.clips:
                     continue
+                bars_part = int(part["bars"])
                 c = self.clips[definition["name"]]
                 bar_time = (60 / tempo) * 4
                 bars_original = math.ceil(float(
                     c.probe["duration"]) / bar_time)
-                diff = part["bars"] - bars_original
+                diff = bars_part - bars_original
                 if diff >= 0:
                     bars = bars_original
-                    while bars >= bars_original and bars > 1 or (part["bars"] % bars) != 0:
+                    while bars >= bars_original and bars > 1 or (bars_part % bars) != 0:
                         bars = bars - 1
 
                 else:
-                    bars = int(part["bars"] % bars_original)
+                    bars = bars_part % bars_original
 
-                loop = definition.get("loop", 0 if int(part["bars"]) == bars else (
-                    int(part["bars"]) / int(bars)) - 1)
-
+                offset = int(definition.get("offset", 0))
+                if "loop" in definition:
+                    loop = int(definition["loop"])
+                elif bars_part == bars:
+                    loop = 0
+                elif offset > 0:
+                    loop = bars_part / (bars + offset) - 1
+                else:
+                    loop = bars_part / (bars) - 1
                 clip_time = bars * bar_time
 
                 sample_rate = int(c.probe["sample_rate"])
@@ -122,6 +129,9 @@ class Automix():
                 tmp_filename = os.path.join(self.tmp_dir, "%032x.wav" % hash)
                 c.input.output(tmp_filename, loglevel=self.loglevel).run()
                 clip = ffmpeg.input(tmp_filename)
+                if offset > 0:
+                    clip = ffmpeg.filter(clip, "apad", pad_dur=offset * bar_time)
+                    clip_time += offset * bar_time
                 clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_time)
                 clip = ffmpeg.filter(clip, "aloop", loop=loop,
                                      size=sample_rate * clip_time)

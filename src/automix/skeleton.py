@@ -28,6 +28,7 @@ import os
 import glob
 import json
 import jsonschema
+from jinja2 import Template
 
 from .automix import Automix
 
@@ -86,6 +87,8 @@ def parse_args(args):
     parser.add_argument("-a", "--alias", help='Alias name for audio clip file',
                         nargs="*", default=[])
     parser.add_argument("-o", "--output", help="Automix output audio file")
+    parser.add_argument("-d", "--data", help="Variables set to fill definition",
+                        nargs="*")
     parser.add_argument(
         "-y", "--yes", help="Overwrite output files without asking.", action='store_true')
 
@@ -120,6 +123,37 @@ def main(args):
 
     with open(args.definition) as f:
         definition = yaml.safe_load(f)
+        if args.data != None:
+            data = {}
+            for d in args.data:
+                split = d.split("=")
+                key = split[0]
+                val = split[1]
+                data[key] = val
+
+            if "bars" in definition:
+                template = Template(definition["bars"])
+                definition["bars"] = float(template.render(data))
+
+            if "tempo" in definition:
+                template = Template(definition["tempo"])
+                definition["tempo"] = float(template.render(data))
+
+            for part in definition["parts"].values():
+                if "bars" in part:
+                    template = Template(part["bars"])
+                    part["bars"] = float(template.render(data))
+
+                for clip in part["clips"]:
+                    if "bars" in clip:
+                        template = Template(clip["bars"])
+                        clip["bars"] = float(template.render(data))
+
+            for filter in definition["filters"]:
+                for field in ["duration", "from", "to"]:
+                    if field in filter:
+                        template = Template(filter[field])
+                        filter[field] = float(template.render(data))
 
         clips = {}
         types = ("*.mp3", "*.wav", "*.aif")

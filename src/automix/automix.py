@@ -50,6 +50,226 @@ class Automix():
             self.clips[clip.name] = clip
 
     def parse_filter(self, filter, bar_time):
+        """
+        this the short description:
+
+        Filters
+        -------
+
+        fade
+        ~~~~
+
+        Apply fade-in/out effect to input audio.
+
+        A description of the accepted parameters follows.
+
+        ``type, t``
+        Specify the effect type, can be either ``in`` for fade-in, or ``out``
+        for a fade-out effect. Default is ``in``.
+
+        ``start_sample, ss``
+        Specify the number of the start sample for starting to apply the fade
+        effect. Default is 0.
+
+        ``nb_samples, ns``
+        Specify the number of samples for which the fade effect has to last.
+        At the end of the fade-in effect the output audio will have the same
+        volume as the input audio, at the end of the fade-out transition the
+        output audio will be silence. Default is 44100.
+
+        ``start_time, st``
+        Specify the start time of the fade effect. Default is 0. The value
+        must be specified as a time duration; see `(ffmpeg-utils)the Time
+        duration section in the ffmpeg-utils(1)
+        manual <ffmpeg-utils.html#time-duration-syntax>`__ for the accepted
+        syntax. If set this option is used instead of ``start_sample``.
+
+        ``duration, d``
+        Specify the duration of the fade effect. See `(ffmpeg-utils)the Time
+        duration section in the ffmpeg-utils(1)
+        manual <ffmpeg-utils.html#time-duration-syntax>`__ for the accepted
+        syntax. At the end of the fade-in effect the output audio will have
+        the same volume as the input audio, at the end of the fade-out
+        transition the output audio will be silence. By default the duration
+        is determined by ``nb_samples``. If set this option is used instead
+        of ``nb_samples``.
+
+        ``curve``
+        Set curve for fade transition.
+
+        It accepts the following values:
+
+        ``tri``
+            select triangular, linear slope (default)
+
+        ``qsin``
+            select quarter of sine wave
+
+        ``hsin``
+            select half of sine wave
+
+        ``esin``
+            select exponential sine wave
+
+        ``log``
+            select logarithmic
+
+        ``ipar``
+            select inverted parabola
+
+        ``qua``
+            select quadratic
+
+        ``cub``
+            select cubic
+
+        ``squ``
+            select square root
+
+        ``cbr``
+            select cubic root
+
+        ``par``
+            select parabola
+
+        ``exp``
+            select exponential
+
+        ``iqsin``
+            select inverted quarter of sine wave
+
+        ``ihsin``
+            select inverted half of sine wave
+
+        ``dese``
+            select double-exponential seat
+
+        ``desi``
+            select double-exponential sigmoid
+
+        ``losi``
+            select logistic sigmoid
+
+        ``sinc``
+            select sine cardinal function
+
+        ``isinc``
+            select inverted sine cardinal function
+
+        ``nofade``
+            no fade applied
+
+        ``silence``
+        Set the initial gain for fade-in or final gain for fade-out. Default
+        value is ``0.0``.
+
+        ``unity``
+        Set the initial gain for fade-out or final gain for fade-in. Default
+        value is ``1.0``.
+
+        lowpass
+        ~~~~~~~~
+
+        Apply a low-pass filter with 3dB point frequency. The filter can be either single-pole or double-pole (the default). The filter roll off at 6dB per pole per octave (20dB per pole per decade).
+
+        The filter accepts the following options:
+
+        ``frequency, f``
+
+        Set frequency in Hz. Default is 500.
+
+        ``poles, p``
+
+        Set number of poles. Default is 2.
+
+        ``width_type, t``
+
+        Set method to specify band-width of filter.
+
+        ``h``
+        Hz
+
+        ``q``
+        Q-Factor
+
+        ``o``
+        octave
+
+        ``s``
+        slope
+
+        ``k``
+        kHz
+
+        ``width, w``
+
+        Specify the band-width of a filter in width_type units. Applies only to
+        double-pole filter. The default is 0.707q and gives a Butterworth
+        response.
+
+        ``mix, m``
+
+        How much to use filtered signal in output. Default is 1. Range is
+        between 0 and 1.
+
+        ``channels, c``
+
+        Specify which channels to filter, by default all available are filtered.
+
+        ``normalize, n``
+
+        Normalize biquad coefficients, by default is disabled. Enabling it will
+        normalize magnitude response at DC to 0dB.
+
+        ``transform, a``
+
+        Set transform type of IIR filter.
+
+        ``di``
+
+        ``dii``
+
+        ``tdi``
+
+        ``tdii``
+
+        ``latt``
+
+        ``svf``
+
+        ``zdf``
+
+        ``precision, r``
+
+        Set precison of filtering.
+
+        ``auto``
+        Pick automatic sample format depending on surround filters.
+
+        ``s16``
+        Always use signed 16-bit.
+
+        ``s32``
+        Always use signed 32-bit.
+
+        ``f32``
+        Always use float 32-bit.
+
+        ``f64``
+        Always use float 64-bit.
+
+        ``block_size, b``
+
+        Set block size used for reverse IIR processing. If this value is set to
+        high enough value (higher than impulse response length truncated when
+        reaches near zero values) filtering will become linear phase otherwise
+        if not big enough it will just produce nasty artifacts.
+
+        Note that filter delay will be exactly this many samples when set to
+        non-zero value.
+
+        """
+
         if "from" in filter:
             enable_from = float(filter["from"])
             enable_to = float(filter["to"]) if "to" in filter else None
@@ -86,9 +306,9 @@ class Automix():
             kwargs["tempo"] = 1.0
             kwargs["pitch"] = float(filter["pitch"])
             filter_name = "rubberband"
-        elif "filters" in self.definition and filter_name in self.definition["filters"]:
+        elif "filters" in self.definition:
             filter_name, kwargs = self.parse_filter(
-                self.definition["filters"][filter_name], bar_time)
+                [x for x in self.definition["filters"] if x["alias"] == filter_name][0], bar_time)
         else:
             raise Exception('Filter not found "{0}"'.format(filter_name))
 
@@ -106,12 +326,12 @@ class Automix():
                 bars_part = int(part["bars"])
                 c = self.clips[definition["name"]]
                 bar_time = (60 / tempo) * 4
-                bars_original = math.ceil(float(
-                    c.probe["duration"]) / bar_time)
+                bars_original = int(definition.get("bars", math.ceil(float(
+                    c.probe["duration"]) / bar_time)))
                 diff = bars_part - bars_original
                 if diff >= 0:
                     bars = bars_original
-                    while bars >= bars_original and bars > 1 or (bars_part % bars) != 0:
+                    while bars > bars_original and bars > 1 or (bars_part % bars) != 0:
                         bars = bars - 1
 
                 else:

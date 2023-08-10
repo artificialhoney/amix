@@ -59,6 +59,6 @@ Usage
 Examples
 --------
 
-All tracks in the `examples` folder were generated und uploaded to SoundCloud_.
+Some tracks in the `examples` folder were generated und uploaded to SoundCloud_.
     
 .. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade

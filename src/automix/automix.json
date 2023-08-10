@@ -40,8 +40,8 @@
       "title": "Filters"
     },
     "filters": {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/definitions/filter" },
+      "type": "array",
+      "items": { "$ref": "#/definitions/filter" },
       "title": "Filters"
     },
     "filter": {
@@ -50,6 +50,30 @@
       "properties": {
         "name": {
           "type": "string"
+        },
+        "curve": {
+          "enum": [
+            "tri",
+            "qsin",
+            "hsin",
+            "esin",
+            "log",
+            "ipar",
+            "qua",
+            "cub",
+            "squ",
+            "cbr",
+            "par",
+            "exp",
+            "iqsin",
+            "ihsin",
+            "dese",
+            "desi",
+            "losi",
+            "sinc",
+            "isinc",
+            "nofade"
+          ]
         }
       },
       "required": ["name"],
@@ -119,15 +143,6 @@
         "bars": {
           "type": "integer"
         },
-        "loop": {
-          "type": "number"
-        },
-        "offset": {
-          "type": "number"
-        },
-        "pitch": {
-          "type": "number"
-        },
         "clips": {
           "type": "array",
           "items": {
@@ -144,6 +159,18 @@
       "properties": {
         "name": {
           "type": "string"
+        },
+        "bars": {
+          "type": "integer"
+        },
+        "loop": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "pitch": {
+          "type": "integer"
         },
         "filters": {
           "type": "array",

@@ -21,28 +21,28 @@ mix:
         - name: pad
           filters:
             - name: fade_in
-        - name: drums
+        - name: backbeat
           filters:
             - name: fade_in
     - name: intro1
       bars: 16
       clips:
         - name: pad
-        - name: drums
+        - name: backbeat
     - name: intro2
       bars: 16
       clips:
         - name: bass0
         - name: bass1
         - name: pad
-        - name: drums
+        - name: backbeat
     - name: intro3
       bars: 16
       clips:
         - name: bass0
         - name: bass1
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: lead
           filters:
             - name: fade_in
@@ -52,7 +52,7 @@ mix:
         - name: bass0
         - name: bass1
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: lead
     - name: main1
       bars: 16
@@ -60,7 +60,7 @@ mix:
         - name: bass0
         - name: bass1
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: lead
         - name: shaker
     - name: main2
@@ -72,7 +72,7 @@ mix:
         - name: lead
           filters:
             - name: fade_out
-        - name: drums
+        - name: backbeat
         - name: shaker
     - name: outro0
       bars: 16
@@ -80,7 +80,7 @@ mix:
         - name: bass0
         - name: bass1
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: shaker
     - name: outro1
       bars: 16
@@ -90,5 +90,5 @@ mix:
         - name: pad
           filters:
             - name: fade_out
-        - name: drums
+        - name: backbeat
         - name: shaker

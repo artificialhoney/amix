@@ -3,8 +3,8 @@ original_tempo: 140
 clips:
   - name: kick
     path: ./clips/kick.aif
-  - name: drums
-    path: ./clips/drums.aif
+  - name: backbeat
+    path: ./clips/backbeat.aif
   - name: break
     path: ./clips/break.aif
   - name: pad
@@ -36,26 +36,26 @@ mix:
         - name: pad
           filters:
             - name: fade_in
-        - name: drums
+        - name: backbeat
           filters:
             - name: fade_in
     - name: intro1
       bars: 16
       clips:
         - name: pad
-        - name: drums
+        - name: backbeat
     - name: intro2
       bars: 16
       clips:
         - name: bass
         - name: pad
-        - name: drums
+        - name: backbeat
     - name: intro3
       bars: 16
       clips:
         - name: bass
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: keys
           filters:
             - name: fade_in
@@ -64,14 +64,14 @@ mix:
       clips:
         - name: bass
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: keys
     - name: main1
       bars: 16
       clips:
         - name: bass
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: keys
         - name: shaker
     - name: main2
@@ -82,14 +82,14 @@ mix:
         - name: keys
           filters:
             - name: fade_out
-        - name: drums
+        - name: backbeat
         - name: shaker
     - name: outro0
       bars: 16
       clips:
         - name: bass
         - name: pad
-        - name: drums
+        - name: backbeat
         - name: shaker
     - name: outro1
       bars: 16

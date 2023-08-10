@@ -1,27 +1,6 @@
 name: Frankfurt
 original_tempo: 140
 tempo: 0.985
-clips:
-  - name: backbeat
-    path: ./clips/backbeat.wav
-  - name: kick
-    path: ./clips/kick.wav
-  - name: hihat1
-    path: ./clips/hihat1.wav
-  - name: hihat2
-    path: ./clips/hihat2.wav
-  - name: clap
-    path: ./clips/clap.wav
-  - name: bass
-    path: ./clips/bass.wav
-  - name: lead
-    path: ./clips/lead.wav
-  - name: lead_flanged
-    path: ./clips/lead-flanged.wav
-  - name: pad
-    path: ./clips/pad.wav
-  - name: pad_flanged
-    path: ./clips/pad-flanged.wav
 filters:
   volume_cut:
     name: volume
@@ -45,21 +24,21 @@ mix:
     - name: intro1
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: kick
         - name: bass
     - name: intro2
       bars: 16
       clips:
+        - name: hihat
         - name: hihat1
-        - name: hihat2
         - name: kick
         - name: bass
     - name: intro3
       bars: 16
       clips:
+        - name: hihat
         - name: hihat1
-        - name: hihat2
         - name: kick
         - name: bass
         - name: lead
@@ -71,8 +50,8 @@ mix:
     - name: main0
       bars: 16
       clips:
+        - name: hihat
         - name: hihat1
-        - name: hihat2
         - name: clap
         - name: kick
         - name: bass
@@ -82,7 +61,7 @@ mix:
     - name: main1
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: clap
         - name: kick
         - name: bass
@@ -92,7 +71,7 @@ mix:
     - name: main2
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: clap
         - name: kick
         - name: bass
@@ -104,7 +83,7 @@ mix:
     - name: main3
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: clap
         - name: kick
         - name: bass
@@ -115,14 +94,14 @@ mix:
     - name: main4
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: kick
         - name: bass
         - name: backbeat
     - name: main5
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: kick
         - name: bass
         - name: backbeat
@@ -135,8 +114,8 @@ mix:
     - name: main6
       bars: 16
       clips:
+        - name: hihat
         - name: hihat1
-        - name: hihat2
         - name: kick
         - name: bass
         - name: backbeat
@@ -145,8 +124,8 @@ mix:
     - name: outro0
       bars: 16
       clips:
+        - name: hihat
         - name: hihat1
-        - name: hihat2
         - name: kick
         - name: bass
         - name: lead_flanged
@@ -154,7 +133,7 @@ mix:
     - name: outro1
       bars: 16
       clips:
-        - name: hihat1
+        - name: hihat
         - name: kick
         - name: bass
         - name: lead_flanged

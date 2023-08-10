@@ -1,22 +1,5 @@
 name: Zurich
 original_tempo: 140
-clips:
-  - name: backbeat
-    path: ./clips/backbeat.wav
-  - name: kick
-    path: ./clips/kick.wav
-  - name: hihat
-    path: ./clips/hihat.wav
-  - name: snare
-    path: ./clips/snare.wav
-  - name: bass
-    path: ./clips/bass.wav
-  - name: lead
-    path: ./clips/lead.wav
-  - name: pad
-    path: ./clips/pad.wav
-  - name: keys
-    path: ./clips/keys.wav
 filters:
   volume_cut:
     name: volume

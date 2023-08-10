@@ -1,25 +1,6 @@
 name: Stuttgart
 original_tempo: 140
 pitch: 1.101
-clips:
-  - name: backbeat
-    path: ./clips/backbeat.wav
-  - name: kick
-    path: ./clips/kick.wav
-  - name: hihat
-    path: ./clips/hihat.wav
-  - name: snare
-    path: ./clips/snare.wav
-  - name: clap
-    path: ./clips/clap.wav
-  - name: bass
-    path: ./clips/bass.wav
-  - name: lead
-    path: ./clips/lead.wav
-  - name: pad
-    path: ./clips/pad.wav
-  - name: beat
-    path: ./clips/beat.wav
 filters:
   volume_cut:
     name: volume

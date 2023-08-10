@@ -46,7 +46,7 @@ class Automix():
     def load_clips(self):
         _logger.info("Loading clips")
 
-        clips = []
+        clips = {}
         types = ("*.mp3", "*.wav", "*.aif")
 
         if self.files and len(self.files) > 0:
@@ -60,23 +60,23 @@ class Automix():
                         if os.path.isfile(f):
                             path = f
                             name = os.path.splitext(os.path.basename(f))[0]
-                            clips.append({"name": name, "path": path})
+                            clips[name] = path
                 elif os.path.isfile(file):
                     path = file
                     name = os.path.splitext(os.path.basename(file))[0]
-                    clips.append({"name": name, "path": path})
+                    clips[name] = path
 
         if not "clips" in self.definition:
-            if len(clips) > 0:
+            if len(clips.values()) > 0:
                 self.definition["clips"] = clips
             else:
-                self.definition["clips"] = []
-        elif len(clips) > 0:
-            self.definition["clips"] = self.definition["clips"] + clips
+                self.definition["clips"] = {}
+        elif len(clips.values()) > 0:
+            self.definition["clips"] = self.definition["clips"] | clips
 
         self.clips = {}
-        for c in self.definition["clips"]:
-            clip = Clip(c["name"], c["path"])
+        for name, path in self.definition["clips"].items():
+            clip = Clip(name, path)
             clip.load()
             self.clips[clip.name] = clip
 

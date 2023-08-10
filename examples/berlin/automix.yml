@@ -1,20 +1,5 @@
 name: Berlin
 original_tempo: 140
-clips:
-  - name: kick
-    path: ./clips/kick.aif
-  - name: backbeat
-    path: ./clips/backbeat.aif
-  - name: break
-    path: ./clips/break.aif
-  - name: pad
-    path: ./clips/pad.aif
-  - name: keys
-    path: ./clips/keys.aif
-  - name: shaker
-    path: ./clips/shaker.aif
-  - name: bass
-    path: ./clips/bass.aif
 filters:
   fade_in:
     name: fade

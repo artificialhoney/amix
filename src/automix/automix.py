@@ -103,17 +103,16 @@ class Automix():
                 bars_original = math.ceil(float(
                     c.probe["duration"]) / bar_time)
                 diff = part["bars"] - bars_original
-                gcd = math.gcd(bars_original, part["bars"])
-                if diff > 0:
+                if diff >= 0:
                     bars = bars_original
-
-                    while bars >= bars_original or (part["bars"] % bars) != 0:
+                    while bars >= bars_original and bars > 1 or (part["bars"] % bars) != 0:
                         bars = bars - 1
 
                 else:
                     bars = int(part["bars"] % bars_original)
 
-                loop = int(part["bars"]) / int(bars) - 1
+                loop = 0 if int(part["bars"]) == bars else (
+                    int(part["bars"]) / int(bars)) - 1
 
                 clip_time = bars * bar_time
 

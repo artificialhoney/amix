@@ -13,82 +13,91 @@ filters:
     curve: tri
     start_time: 0
     duration: 16
+parts:
+  intro0:
+    bars: 16
+    clips:
+      - name: pad
+        filters:
+          - name: fade_in
+      - name: backbeat
+        filters:
+          - name: fade_in
+  intro1:
+    bars: 16
+    clips:
+      - name: pad
+      - name: backbeat
+  intro2:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: backbeat
+  intro3:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: backbeat
+      - name: lead
+        filters:
+          - name: fade_in
+  main0:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: backbeat
+      - name: lead
+  main1:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: backbeat
+      - name: lead
+      - name: shaker
+  main2:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: lead
+        filters:
+          - name: fade_out
+      - name: backbeat
+      - name: shaker
+  outro0:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+      - name: backbeat
+      - name: shaker
+  outro1:
+    bars: 16
+    clips:
+      - name: bass0
+      - name: bass1
+      - name: pad
+        filters:
+          - name: fade_out
+      - name: backbeat
+      - name: shaker
 mix:
   main:
-    - name: intro0
-      bars: 16
-      clips:
-        - name: pad
-          filters:
-            - name: fade_in
-        - name: backbeat
-          filters:
-            - name: fade_in
-    - name: intro1
-      bars: 16
-      clips:
-        - name: pad
-        - name: backbeat
-    - name: intro2
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: backbeat
-    - name: intro3
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: backbeat
-        - name: lead
-          filters:
-            - name: fade_in
-    - name: main0
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: backbeat
-        - name: lead
-    - name: main1
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: backbeat
-        - name: lead
-        - name: shaker
-    - name: main2
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: lead
-          filters:
-            - name: fade_out
-        - name: backbeat
-        - name: shaker
-    - name: outro0
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-        - name: backbeat
-        - name: shaker
-    - name: outro1
-      bars: 16
-      clips:
-        - name: bass0
-        - name: bass1
-        - name: pad
-          filters:
-            - name: fade_out
-        - name: backbeat
-        - name: shaker
+    pitch: 0.9
+    segments:
+      - name: intro0
+        parts:
+          - name: intro0
+      - name: intro1
+        parts:
+          - name: intro1

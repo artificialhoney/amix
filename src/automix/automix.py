@@ -26,11 +26,11 @@ class Clip():
 class Automix():
     def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
         self.definition = definition
+        self.parts_dir = os.path.join(os.getcwd(), "parts")
         self.mix_dir = os.path.join(os.getcwd(), "mix")
         self.tmp_dir = os.path.join(self.mix_dir, "tmp")
         if output == None:
-            self.output = os.path.join(
-                os.getcwd(), "{0}.wav".format(self.definition["name"]))
+            self.output = os.getcwd()
         else:
             self.output = os.path.realpath(output)
         self.overwrite_output = overwrite_output
@@ -89,11 +89,11 @@ class Automix():
 
         return filter_name, kwargs
 
-    def create_mix_parts(self, name, definition, tempo):
-        _logger.info('Creating mix parts "{0}"'.format(name))
+    def create_mix_parts(self, definition, tempo):
+        _logger.info('Creating mix parts')
         self.mix_parts = {}
-        for part in definition:
-            _logger.info('Creating mix part "{0}"'.format(part["name"]))
+        for name, part in definition.items():
+            _logger.info('Creating mix part "{0}"'.format(name))
             clips = []
             for definition in part["clips"]:
                 if not definition["name"] in self.clips:
@@ -149,42 +149,57 @@ class Automix():
             _logger.debug('Using {0} clips "{1}" with weights "{2}"'.format(
                 len(clips), [x["definition"]["name"] for x in clips], weights))
 
-            filename = os.path.join(self.mix_dir, "{0}.wav".format(part["name"]))
+            filename = os.path.join(self.parts_dir, "{0}.wav".format(name))
             _logger.info(
-                'Creating temporary file "{0}" for part "{1}"'.format(part["name"], filename))
+                'Creating temporary file "{0}" for part "{1}"'.format(name, filename))
             ffmpeg.filter([x["clip"] for x in clips], 'amix', weights=weights,
                           inputs=len(clips), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
-            self.mix_parts[name] = self.mix_parts.get(name, {})
-            self.mix_parts[name][part["name"]] = ffmpeg.input(filename)
+            self.mix_parts[name] = ffmpeg.input(filename)
 
     def setup(self):
         _logger.info("Setting up automix")
         self.load_clips()
+        Path(self.parts_dir).mkdir(parents=True, exist_ok=True)
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
         Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
-        for key in self.definition["mix"].keys():
-            self.create_mix_parts(
-                key, self.definition["mix"][key], self.definition["original_tempo"])
+        self.create_mix_parts(
+            self.definition["parts"], self.definition["original_tempo"])
 
-    def create_mix(self):
-        _logger.info('Creating mix for "{0}"'.format(self.definition["name"]))
-        mixes = []
-        for key in self.mix_parts:
-            mix_parts = self.mix_parts[key]
-            segments = [x for x in mix_parts.values()]
-            mixes.append({"parts": mix_parts, "clip": ffmpeg.filter(
-                segments, 'concat', n=len(segments), v=0, a=1)})
-        self.mix = ffmpeg.filter([x["clip"] for x in mixes], 'amix',
-                                 inputs=len(mixes), normalize=False)
-        tempo = self.definition.get("tempo", 1)
-        pitch = self.definition.get("pitch", 1)
-        if tempo != 1 or pitch != 1:
-            self.mix = ffmpeg.filter(self.mix, 'rubberband', tempo=tempo, pitch=pitch)
+    def create_mixes(self):
+        _logger.info("Creating mixes")
+        self.mixes = {}
+        for mix_name, definition in self.definition["mix"].items():
+            mix = []
+            mix_dir = os.path.join(self.mix_dir, mix_name)
+            Path(mix_dir).mkdir(parents=True, exist_ok=True)
+            for track in definition["segments"]:
+                weights = " ".join(
+                    [str(x["weight"] if "weight" in x else "1") for x in track["parts"]])
+                parts = [self.mix_parts[x["name"]] for x in track["parts"]]
+                _logger.debug('Using {0} parts "{1}" with weights "{2}"'.format(
+                    len(parts), [x["name"] for x in parts], weights))
+                filename = os.path.join(mix_dir, "{0}.wav".format(track["name"]))
+                _logger.info(
+                    'Creating temporary file "{0}" for part "{1}"'.format(track["name"], filename))
+                ffmpeg.filter([x for x in parts], 'amix', weights=weights,
+                              inputs=len(parts), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
+                mix.append(ffmpeg.input(filename))
+            self.mixes[mix_name] = ffmpeg.filter(
+                mix, 'concat', n=len(mix), v=0, a=1)
+            tempo = float(definition.get("tempo", 1))
+            pitch = float(definition.get("pitch", 1))
+            if tempo != 1 or pitch != 1:
+                self.mixes[mix_name] = ffmpeg.filter(
+                    self.mixes[mix_name], 'rubberband', tempo=tempo, pitch=pitch)
 
-    def render_mix(self):
-        _logger.info('Rendering mix to "{0}"'.format(self.output))
-        self.mix.output(self.output, loglevel=self.loglevel).run(
-            overwrite_output=self.overwrite_output)
+    def render_mixes(self):
+        _logger.info("Rendering mixes")
+        for mix_name, mix in self.mixes.items():
+            filename = os.path.join(self.output, "{0} ({1}).wav".format(
+                self.definition["name"], mix_name))
+            _logger.info('Rendering mix to "{0}"'.format(filename))
+            mix.output(filename, loglevel=self.loglevel).run(
+                overwrite_output=self.overwrite_output)
 
     def cleanup(self):
         _logger.info("Cleaning up")
@@ -192,6 +207,6 @@ class Automix():
 
     def run(self):
         self.setup()
-        self.create_mix()
-        self.render_mix()
+        self.create_mixes()
+        self.render_mixes()
         self.cleanup()

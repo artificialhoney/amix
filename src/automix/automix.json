@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/automix",
+  "definitions": {
+    "automix": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "original_tempo": {
+          "type": "number"
+        },
+        "pitch": {
+          "type": "number"
+        },
+        "tempo": {
+          "type": "number"
+        },
+        "clips": {
+          "$ref": "#/definitions/clips"
+        },
+        "filters": {
+          "$ref": "#/definitions/filters"
+        },
+        "parts": {
+          "$ref": "#/definitions/parts"
+        },
+        "mixes": {
+          "$ref": "#/definitions/mixes"
+        }
+      },
+      "required": ["mixes", "name", "original_tempo", "parts"],
+      "title": "Automix"
+    },
+    "clips": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "title": "Filters"
+    },
+    "filters": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/filter" },
+      "title": "Filters"
+    },
+    "filter": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": ["name"],
+      "title": "Filter"
+    },
+    "mixes": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/mix" },
+      "title": "Mix"
+    },
+    "mix": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pitch": {
+          "type": "number"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/segment"
+          }
+        }
+      },
+      "required": ["segments"],
+      "title": "Mix"
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parts-element"
+          }
+        }
+      },
+      "required": ["name", "parts"],
+      "title": "Segment"
+    },
+    "parts-element": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": ["name"],
+      "title": "Parts Element"
+    },
+    "parts": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/part"
+      },
+      "title": "Parts"
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bars": {
+          "type": "integer"
+        },
+        "loop": {
+          "type": "number"
+        },
+        "offset": {
+          "type": "number"
+        },
+        "pitch": {
+          "type": "number"
+        },
+        "clips": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clips-element"
+          }
+        }
+      },
+      "required": ["bars", "clips"],
+      "title": "Part"
+    },
+    "clips-element": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/filter"
+          }
+        }
+      },
+      "required": ["name"],
+      "title": "Clips Element"
+    }
+  }
+}

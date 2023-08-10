@@ -26,6 +26,8 @@ import sys
 import yaml
 import os
 import glob
+import json
+import jsonschema
 
 from .automix import Automix
 
@@ -152,9 +154,14 @@ def main(args):
         elif len(clips.values()) > 0:
             definition["clips"] = definition["clips"] | clips
 
-    Automix(definition, args.output, args.yes, args.loglevel).run()
-
-    _logger.info("Done automix")
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "automix.json")) as f:
+            schema = json.load(f)
+        jsonschema.validate(definition, schema)
+        Automix(definition, args.output, args.yes, args.loglevel).run()
+        _logger.info("Done automix")
+    except jsonschema.exceptions.ValidationError:
+        _logger.exception("Error while parsing automix definition file")
 
 
 def run():

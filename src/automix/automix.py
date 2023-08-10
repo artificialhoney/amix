@@ -173,7 +173,7 @@ class Automix():
     def create_mixes(self):
         _logger.info("Creating mixes")
         self.mixes = {}
-        for mix_name, definition in self.definition["mix"].items():
+        for mix_name, definition in self.definition["mixes"].items():
             mix = []
             mix_dir = os.path.join(self.mix_dir, mix_name)
             Path(mix_dir).mkdir(parents=True, exist_ok=True)

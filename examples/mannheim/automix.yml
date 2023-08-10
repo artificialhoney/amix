@@ -91,13 +91,14 @@ parts:
           - name: fade_out
       - name: backbeat
       - name: shaker
-mix:
+mixes:
   main:
     pitch: 0.9
     segments:
       - name: intro0
         parts:
           - name: intro0
+          - name: intro1
       - name: intro1
         parts:
           - name: intro1

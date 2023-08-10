@@ -13,24 +13,47 @@ filters:
     curve: tri
     start_time: 0
     duration: 16
+  - name: volume
+    alias: volume_cut
+    volume: 0
+    from: 15.65
+    to: 16
 parts:
   backbeat:
     bars: 16
     clips:
       - name: backbeat
+        filters:
+          - name: volume_cut
   backbeat_with_bass:
     bars: 16
     clips:
       - name: bass
         bars: 8
       - name: backbeat
+        filters:
+          - name: volume_cut
   backbeat_with_bass_and_snare:
     bars: 16
     clips:
       - name: bass
         bars: 8
       - name: backbeat
+        filters:
+          - name: volume_cut
       - name: snare1
+        filters:
+          - name: volume_cut
+  backbeat_with_bass_and_snare_break:
+    bars: 16
+    clips:
+      - name: bass
+      - name: backbeat
+        filters:
+          - name: volume_cut
+      - name: snare1
+        filters:
+          - name: volume_cut
   backbeat_with_bass_full:
     bars: 16
     clips:
@@ -115,9 +138,15 @@ parts:
     bars: 16
     clips:
       - name: lead
-        bars: 8
         filters:
           - name: fade_in
+  lead_fade_out:
+    bars: 16
+    clips:
+      - name: lead
+        bars: 4
+        filters:
+          - name: fade_out
 mixes:
   main:
     segments:
@@ -145,31 +174,15 @@ mixes:
           - name: hihat
           - name: percussion
           - name: snare
-      - name: main0
-        parts:
-          - name: backbeat_with_bass_and_snare
-          - name: hihat
-          - name: percussion
-          - name: snare
-          - name: pad_fade_in
       - name: main1
         parts:
-          - name: backbeat_with_bass_and_snare
+          - name: backbeat_with_bass_and_snare_break
           - name: hihat
           - name: percussion
-          - name: snare
-          - name: pad
-          - name: lead_fade_in
-      - name: main2
-        parts:
-          - name: backbeat_with_bass_and_snare_full
-          - name: hihat
-          - name: percussion
-          - name: bassline
           - name: snare_fade_out
           - name: snare_flanged_fade_in
-          - name: pad
-          - name: lead
+          - name: pad_fade_in
+          - name: lead_fade_in
       - name: main3
         parts:
           - name: backbeat_with_bass_and_snare_full
@@ -241,8 +254,5 @@ mixes:
           - name: lead
       - name: outro6
         parts:
-          - name: pad_filtered
-          - name: lead
-      - name: outro7
-        parts:
           - name: pad_filtered_fade_out
+          - name: lead_fade_out

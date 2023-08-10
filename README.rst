@@ -52,7 +52,7 @@ Usage
 
 .. code-block::
 
-    cd examples/zurich && automix
+    cd examples/mannheim && automix
 
 
 --------

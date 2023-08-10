@@ -111,8 +111,8 @@ class Automix():
                 else:
                     bars = int(part["bars"] % bars_original)
 
-                loop = 0 if int(part["bars"]) == bars else (
-                    int(part["bars"]) / int(bars)) - 1
+                loop = definition.get("loop", 0 if int(part["bars"]) == bars else (
+                    int(part["bars"]) / int(bars)) - 1)
 
                 clip_time = bars * bar_time
 

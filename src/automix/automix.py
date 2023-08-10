@@ -1,6 +1,5 @@
 import logging
 import os
-import glob
 import shutil
 import random
 from pathlib import Path
@@ -25,8 +24,7 @@ class Clip():
 
 
 class Automix():
-    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None, files=[]):
-        self.files = files
+    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
         self.definition = definition
         self.mix_dir = os.path.join(os.getcwd(), "mix")
         self.tmp_dir = os.path.join(self.mix_dir, "tmp")
@@ -45,35 +43,6 @@ class Automix():
 
     def load_clips(self):
         _logger.info("Loading clips")
-
-        clips = {}
-        types = ("*.mp3", "*.wav", "*.aif")
-
-        if self.files and len(self.files) > 0:
-            for file in self.files:
-                file = os.path.realpath(file)
-                if os.path.isdir(file):
-                    files_grabbed = []
-                    for t in types:
-                        files_grabbed.extend(glob.glob(os.path.join(file, t)))
-                    for f in files_grabbed:
-                        if os.path.isfile(f):
-                            path = f
-                            name = os.path.splitext(os.path.basename(f))[0]
-                            clips[name] = path
-                elif os.path.isfile(file):
-                    path = file
-                    name = os.path.splitext(os.path.basename(file))[0]
-                    clips[name] = path
-
-        if not "clips" in self.definition:
-            if len(clips.values()) > 0:
-                self.definition["clips"] = clips
-            else:
-                self.definition["clips"] = {}
-        elif len(clips.values()) > 0:
-            self.definition["clips"] = self.definition["clips"] | clips
-
         self.clips = {}
         for name, path in self.definition["clips"].items():
             clip = Clip(name, path)

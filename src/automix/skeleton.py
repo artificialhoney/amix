@@ -25,6 +25,7 @@ import logging
 import sys
 import yaml
 import os
+import glob
 
 from .automix import Automix
 
@@ -78,8 +79,10 @@ def parse_args(args):
     parser.add_argument("definition", help="Automix definition file", nargs="?",
                         default=os.path.join(os.getcwd(), "automix.yml"))
 
-    parser.add_argument("-c", "--clips", help="Automix input audio clips",
+    parser.add_argument("-c", "--clip", help='Automix input audio clip file or folder ("*.mp3", "*.wav", "*.aif")',
                         nargs="*", default=[os.path.join(os.getcwd(), "clips")])
+    parser.add_argument("-a", "--alias", help='Alias name for audio clip file',
+                        nargs="*", default=[])
     parser.add_argument("-o", "--output", help="Automix output audio file")
     parser.add_argument(
         "-y", "--yes", help="Overwrite output files without asking.", action='store_true')
@@ -116,7 +119,40 @@ def main(args):
     with open(args.definition) as f:
         definition = yaml.safe_load(f)
 
-    Automix(definition, args.output, args.yes, args.loglevel, args.clips).run()
+        clips = {}
+        types = ("*.mp3", "*.wav", "*.aif")
+        index = 0
+
+        if args.clip and len(args.clip) > 0:
+            for file in args.clip:
+                file = os.path.realpath(file)
+                if os.path.isdir(file):
+                    files_grabbed = []
+                    for t in types:
+                        files_grabbed.extend(glob.glob(os.path.join(file, t)))
+                    for f in files_grabbed:
+                        if os.path.isfile(f):
+                            path = f
+                            name = os.path.splitext(os.path.basename(f))[
+                                0] if index not in args.alias else args.alias[index]
+                            index += 1
+                            clips[name] = path
+                elif os.path.isfile(file):
+                    path = file
+                    name = os.path.splitext(os.path.basename(file))[
+                        0] if index not in args.alias else args.alias[index]
+                    index += 1
+                    clips[name] = path
+
+        if not "clips" in definition:
+            if len(clips.values()) > 0:
+                definition["clips"] = clips
+            else:
+                definition["clips"] = {}
+        elif len(clips.values()) > 0:
+            definition["clips"] = definition["clips"] | clips
+
+    Automix(definition, args.output, args.yes, args.loglevel).run()
 
     _logger.info("Done automix")
 

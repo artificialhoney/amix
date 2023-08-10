@@ -74,13 +74,18 @@ class Automix():
             kwargs["type"] = filter["type"]
             filter_name = "afade"
         elif filter_name == "lowpass":
-            kwargs["frequency"] = int(filter["frequency"])
+            kwargs["frequency"] = float(filter["frequency"])
         elif filter_name == "highpass":
-            kwargs["frequency"] = int(filter["frequency"])
+            kwargs["frequency"] = float(filter["frequency"])
+        elif filter_name == "bandpass":
+            kwargs["frequency"] = float(filter["frequency"])
+            kwargs["width"] = float(filter["width"])
         elif filter_name == "volume":
             kwargs["volume"] = float(filter["volume"])
-        elif filter_name == "flanger":
-            kwargs["delay"] = float(filter["delay"])
+        elif filter_name == "pitch":
+            kwargs["tempo"] = 1.0
+            kwargs["pitch"] = float(filter["pitch"])
+            filter_name = "rubberband"
         elif "filters" in self.definition and filter_name in self.definition["filters"]:
             filter_name, kwargs = self.parse_filter(
                 self.definition["filters"][filter_name], bar_time)

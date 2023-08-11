@@ -139,6 +139,10 @@ def main(args):
                 template = Template(definition["tempo"])
                 definition["tempo"] = float(template.render(data))
 
+            if "pitch" in definition:
+                template = Template(definition["pitch"])
+                definition["pitch"] = float(template.render(data))
+
             for part in definition["parts"].values():
                 if "bars" in part:
                     template = Template(part["bars"])

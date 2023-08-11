@@ -412,7 +412,7 @@ class Automix():
             self.mixes[mix_name] = ffmpeg.filter(
                 mix, 'concat', n=len(mix), v=0, a=1)
             tempo = float(definition.get("tempo", self.definition.get("tempo", 1)))
-            pitch = float(definition.get("pitch", self.definition.get("tempo", 1)))
+            pitch = float(definition.get("pitch", self.definition.get("pitch", 1)))
             if tempo != 1 or pitch != 1:
                 self.mixes[mix_name] = ffmpeg.filter(
                     self.mixes[mix_name], 'rubberband', tempo=tempo, pitch=pitch)

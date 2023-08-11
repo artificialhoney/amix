@@ -43,7 +43,7 @@ Make sure, to have **ffmpeg** installed.
 
 .. code-block::
 
-    pip install -r requirements.txt
+    pip install automix
 
 
 -----
@@ -51,7 +51,7 @@ Usage
 -----
 
 Check out the `examples` folder. I also uploaded my result to SoundCloud_.
-    
+
 .. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
 
 

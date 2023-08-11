@@ -1,5 +1,5 @@
 name: Heidelberg
-original_tempo: 180
+original_tempo: "{{ original_tempo }}"
 tempo: "{{ tempo }}"
 pitch: "{{ pitch }}"
 filters:

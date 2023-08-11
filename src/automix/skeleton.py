@@ -131,6 +131,10 @@ def main(args):
                 val = split[1]
                 data[key] = val
 
+            if "original_tempo" in definition:
+                template = Template(definition["original_tempo"])
+                definition["original_tempo"] = float(template.render(data))
+
             if "bars" in definition:
                 template = Template(definition["bars"])
                 definition["bars"] = float(template.render(data))

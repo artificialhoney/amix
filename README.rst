@@ -50,15 +50,15 @@ Make sure, to have **ffmpeg** installed.
 Usage
 -----
 
+Check out the `examples` folder. I also uploaded my result to SoundCloud_.
+    
+.. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
+
+
 .. code-block::
 
     cd examples/mannheim && automix
 
+.. code-block::
 
---------
-Examples
---------
-
-Some tracks in the `examples` folder were generated und uploaded to SoundCloud_.
-    
-.. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
+    cd examples/heidelberg && automix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"

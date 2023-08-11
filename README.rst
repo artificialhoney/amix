@@ -61,7 +61,7 @@ Check out the `examples` folder. I also uploaded my result to SoundCloud_.
 
 .. code-block::
 
-    cd examples/mailand && automix -vv
+    cd examples/milano && automix -vv
 
 .. code-block::
 

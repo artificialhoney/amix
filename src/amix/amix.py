@@ -23,14 +23,14 @@ class _Clip:
         _logger.debug('Probe for clip "{0}" is "{1}"'.format(self.name, self.probe))
 
 
-class Automix:
+class Amix:
     """
-    Automix itself.
+    Amix itself.
     """
 
     def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
         """
-        Creates a Automix instance for a definition.
+        Creates a Amix instance for a definition.
         """
 
         self.definition = definition
@@ -324,7 +324,7 @@ class Automix:
             self.mix_parts[name] = ffmpeg.input(filename)
 
     def _setup(self):
-        _logger.info("Setting up automix")
+        _logger.info("Setting up amix")
         self._load_clips()
         Path(self.parts_dir).mkdir(parents=True, exist_ok=True)
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)

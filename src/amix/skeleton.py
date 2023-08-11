@@ -9,9 +9,9 @@ import jsonschema
 import yaml
 from jinja2 import Template
 
-from automix import __version__
+from amix import __version__
 
-from .automix import Automix
+from .amix import Amix
 
 __author__ = "Sebastian Krüger"
 __copyright__ = "Sebastian Krüger"
@@ -33,7 +33,7 @@ def parse_args(args):
     parser.add_argument(
         "--version",
         action="version",
-        version=f"automix {__version__}",
+        version=f"amix {__version__}",
     )
     parser.add_argument(
         "-v",
@@ -54,22 +54,22 @@ def parse_args(args):
 
     parser.add_argument(
         "definition",
-        help="Automix definition file",
+        help="Amix definition file",
         nargs="?",
-        default=os.path.join(os.getcwd(), "automix.yml"),
+        default=os.path.join(os.getcwd(), "amix.yml"),
     )
 
     parser.add_argument(
         "-c",
         "--clip",
-        help='Automix input audio clip file or folder ("*.mp3", "*.wav", "*.aif")',
+        help='Amix input audio clip file or folder ("*.mp3", "*.wav", "*.aif")',
         nargs="*",
         default=[os.path.join(os.getcwd(), "clips")],
     )
     parser.add_argument(
         "-a", "--alias", help="Alias name for audio clip file", nargs="*", default=[]
     )
-    parser.add_argument("-o", "--output", help="Automix output audio file")
+    parser.add_argument("-o", "--output", help="Amix output audio file")
     parser.add_argument(
         "-d", "--data", help="Variables set to fill definition", nargs="*"
     )
@@ -98,12 +98,12 @@ def setup_logging(loglevel):
 
 def main(args):
     """
-    Wrapper allowing :func:`automix` to be called with string arguments in a CLI fashion
+    Wrapper allowing :func:`amix` to be called with string arguments in a CLI fashion
 
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
-    _logger.info("Starting automix")
+    _logger.info("Starting amix")
 
     with open(args.definition) as f:
         definition = yaml.safe_load(f)
@@ -187,13 +187,13 @@ def main(args):
             definition["clips"] = definition["clips"] | clips
 
     try:
-        with open(os.path.join(os.path.dirname(__file__), "automix.json")) as f:
+        with open(os.path.join(os.path.dirname(__file__), "amix.json")) as f:
             schema = json.load(f)
         jsonschema.validate(definition, schema)
-        Automix(definition, args.output, args.yes, args.loglevel).run()
-        _logger.info("Done automix")
+        Amix(definition, args.output, args.yes, args.loglevel).run()
+        _logger.info("Done amix")
     except jsonschema.exceptions.ValidationError:
-        _logger.exception("Error while parsing automix definition file")
+        _logger.exception("Error while parsing amix definition file")
 
 
 def run():

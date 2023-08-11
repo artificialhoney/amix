@@ -1,6 +1,6 @@
 import pytest
 
-from automix.skeleton import fib, main
+from amix.skeleton import fib, main
 
 __author__ = "Sebastian Krüger"
 __copyright__ = "Sebastian Krüger"

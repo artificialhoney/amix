@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/automix",
+  "$ref": "#/definitions/amix",
   "definitions": {
-    "automix": {
+    "amix": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -35,7 +35,7 @@
         }
       },
       "required": ["mixes", "name", "original_tempo", "parts"],
-      "title": "Automix"
+      "title": "Amix"
     },
     "clips": {
       "type": "object",

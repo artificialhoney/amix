@@ -1,8 +1,8 @@
 =======
-automix
+amix
 =======
 
-This is the documentation of **automix**.
+This is the documentation of **amix**.
 
 .. note::
 

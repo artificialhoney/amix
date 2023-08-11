@@ -1,5 +1,5 @@
 """
-    Setup file for automix.
+    Setup file for amix.
     Use setup.cfg to configure your project.
 
     This file was generated with PyScaffold 4.5.

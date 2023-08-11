@@ -40,7 +40,7 @@ jobs:
           pip install -r docs/requirements.txt && pip install -r requirements.txt
       - name: Sphinx build
         run: |
-          sphinx-build docs docs/_build
+          make -C docs html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:

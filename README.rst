@@ -29,9 +29,9 @@
 
 |
 
-=======
+====
 amix
-=======
+====
 
 Automatic mix of audio clips.
 

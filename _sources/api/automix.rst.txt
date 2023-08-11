@@ -1,0 +1,29 @@
+automix package
+===============
+
+Submodules
+----------
+
+automix.automix module
+----------------------
+
+.. automodule:: automix.automix
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+automix.skeleton module
+-----------------------
+
+.. automodule:: automix.skeleton
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: automix
+   :members:
+   :undoc-members:
+   :show-inheritance:

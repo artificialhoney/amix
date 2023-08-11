@@ -1,0 +1,7 @@
+automix
+=======
+
+.. toctree::
+   :maxdepth: 4
+
+   automix

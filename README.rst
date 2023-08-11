@@ -61,4 +61,8 @@ Check out the `examples` folder. I also uploaded my result to SoundCloud_.
 
 .. code-block::
 
+    cd examples/mailand && automix -vv
+
+.. code-block::
+
     cd examples/heidelberg && automix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"

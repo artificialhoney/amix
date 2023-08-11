@@ -1,0 +1,213 @@
+name: Milano
+original_tempo: 120
+pitch: 1
+bars: 8
+filters:
+  - name: fade
+    alias: fade_in
+    type: in
+    curve: qsin
+    start_time: 0
+    duration: 8
+  - name: fade
+    alias: fade_out
+    type: out
+    curve: qsin
+    start_time: 0
+    duration: 8
+  - name: volume
+    alias: volume_cut
+    volume: 0
+    from: 7.65
+    to: 8
+parts:
+  backbeat:
+    clips:
+      - name: backbeat
+  backbeat_fade_in:
+    clips:
+      - name: backbeat_fade_in
+        filters:
+          - name: volume_cut
+  backbeat_fade_out:
+    clips:
+      - name: backbeat_fade_out
+  backbeat_volume_cut:
+    clips:
+      - name: backbeat
+        filters:
+          - name: volume_cut
+  backbeat1:
+    clips:
+      - name: backbeat1
+  backbeat1_fade_in:
+    clips:
+      - name: backbeat1_fade_in
+        filters:
+          - name: volume_cut
+  backbeat1_fade_out:
+    clips:
+      - name: backbeat1_fade_out
+  bassline:
+    clips:
+      - name: bass
+  lead:
+    clips:
+      - name: lead
+  lead_fade_in:
+    clips:
+      - name: lead_fade_in
+  lead_fade_out:
+    clips:
+      - name: lead_fade_out
+  kick:
+    clips:
+      - name: kick
+  clap:
+    clips:
+      - name: clap
+  hihat:
+    clips:
+      - name: hihat
+  shaker:
+    clips:
+      - name: hihat
+mixes:
+  main:
+    segments:
+      - name: intro0
+        parts:
+          - name: kick
+      - name: intro1
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+      - name: intro2
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: backbeat_fade_in
+      - name: intro3
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: backbeat
+      - name: intro4
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat_volume_cut
+          - name: backbeat1_fade_in
+      - name: main0
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: clap
+          - name: backbeat
+          - name: backbeat1
+      - name: main0b
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: clap
+          - name: backbeat
+          - name: backbeat1
+      - name: main1
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: clap
+          - name: backbeat
+          - name: backbeat1
+          - name: lead_fade_in
+      - name: main2
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+          - name: backbeat1
+          - name: lead
+      - name: main2b
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+          - name: backbeat1
+          - name: lead
+      - name: main3
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+          - name: backbeat1_fade_out
+          - name: lead
+      - name: main4
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+          - name: lead
+      - name: main4b
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+          - name: lead
+      - name: main5
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat_volume_cut
+          - name: lead_fade_out
+      - name: outro0
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+      - name: outro0b
+        parts:
+          - name: bassline
+          - name: kick
+          - name: shaker
+          - name: hihat
+          - name: backbeat
+      - name: outro1
+        parts:
+          - name: bassline
+          - name: shaker
+          - name: kick
+          - name: backbeat
+      - name: outro1b
+        parts:
+          - name: bassline
+          - name: shaker
+          - name: kick
+          - name: backbeat
+      - name: outro3
+        parts:
+          - name: backbeat

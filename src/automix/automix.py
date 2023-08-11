@@ -314,20 +314,20 @@ class Automix():
 
         return filter_name, kwargs
 
-    def create_mix_parts(self, definition, tempo):
+    def create_mix_parts(self, parts, tempo, bars_global=None):
         _logger.info('Creating mix parts')
         self.mix_parts = {}
-        for name, part in definition.items():
+        for name, part in parts.items():
             _logger.info('Creating mix part "{0}"'.format(name))
             clips = []
             for definition in part["clips"]:
                 if not definition["name"] in self.clips:
                     continue
-                bars_part = int(part["bars"])
                 c = self.clips[definition["name"]]
                 bar_time = (60 / tempo) * 4
-                bars_original = int(definition.get("bars", math.ceil(float(
-                    c.probe["duration"]) / bar_time)))
+                bars_original = math.ceil(float(
+                    c.probe["duration"]) / bar_time)
+                bars_part = definition.get("bars", part.get("bars", bars_global))
                 diff = bars_part - bars_original
                 if diff >= 0:
                     bars = bars_original
@@ -388,7 +388,7 @@ class Automix():
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
         Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
         self.create_mix_parts(
-            self.definition["parts"], self.definition["original_tempo"])
+            self.definition["parts"], self.definition["original_tempo"], self.definition["bars"])
 
     def create_mixes(self):
         _logger.info("Creating mixes")

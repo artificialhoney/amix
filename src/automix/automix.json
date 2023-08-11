@@ -12,6 +12,9 @@
         "original_tempo": {
           "type": "number"
         },
+        "bars": {
+          "type": "integer"
+        },
         "pitch": {
           "type": "number"
         },
@@ -37,11 +40,12 @@
     "clips": {
       "type": "object",
       "additionalProperties": { "type": "string" },
-      "title": "Filters"
+      "title": "Clips"
     },
     "filters": {
       "type": "array",
       "items": { "$ref": "#/definitions/filter" },
+      "uniqueItems": true,
       "title": "Filters"
     },
     "filter": {
@@ -95,7 +99,9 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/segment"
-          }
+          },
+          "uniqueItems": true,
+          "title": "Segments"
         }
       },
       "required": ["segments"],
@@ -112,7 +118,9 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/parts-element"
-          }
+          },
+          "uniqueItems": true,
+          "title": "Parts"
         }
       },
       "required": ["name", "parts"],
@@ -150,7 +158,7 @@
           }
         }
       },
-      "required": ["bars", "clips"],
+      "required": ["clips"],
       "title": "Part"
     },
     "clips-element": {

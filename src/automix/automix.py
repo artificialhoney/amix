@@ -1,15 +1,16 @@
 import logging
-import os
-import shutil
-import random
-from pathlib import Path
 import math
+import os
+import random
+import shutil
+from pathlib import Path
+
 import ffmpeg
 
 _logger = logging.getLogger(__name__)
 
 
-class Clip():
+class _Clip:
     def __init__(self, name, path):
         self.name = name
         self.path = path
@@ -19,12 +20,19 @@ class Clip():
         _logger.info('Loading clip "{0}" from "{1}"'.format(self.name, self.path))
         self.input = ffmpeg.input(file)
         self.probe = ffmpeg.probe(file)["streams"][0]
-        _logger.debug('Probe for clip "{0}" is "{1}"'.format(
-            self.name, self.probe))
+        _logger.debug('Probe for clip "{0}" is "{1}"'.format(self.name, self.probe))
 
 
-class Automix():
+class Automix:
+    """
+    Automix itself.
+    """
+
     def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
+        """
+        Creates a Automix instance for a definition.
+        """
+
         self.definition = definition
         self.parts_dir = os.path.join(os.getcwd(), "parts")
         self.mix_dir = os.path.join(os.getcwd(), "mix")
@@ -35,23 +43,27 @@ class Automix():
             self.output = os.path.realpath(output)
         self.overwrite_output = overwrite_output
         if loglevel == logging.DEBUG:
-            self.loglevel = 'debug'
+            self.loglevel = "debug"
         elif loglevel == logging.INFO:
-            self.loglevel = 'info'
+            self.loglevel = "info"
         else:
-            self.loglevel = 'error'
+            self.loglevel = "error"
 
-    def load_clips(self):
+    def _load_clips(self):
+        """
+        Loads clips.
+        """
+
         _logger.info("Loading clips")
         self.clips = {}
         for name, path in self.definition["clips"].items():
-            clip = Clip(name, path)
+            clip = _Clip(name, path)
             clip.load()
             self.clips[clip.name] = clip
 
-    def parse_filter(self, filter, bar_time):
+    def _parse_filter(self, filter, bar_time):
         """
-        this the short description:
+        Parses filter definitions.
 
         Filters
         -------
@@ -66,16 +78,6 @@ class Automix():
         ``type, t``
         Specify the effect type, can be either ``in`` for fade-in, or ``out``
         for a fade-out effect. Default is ``in``.
-
-        ``start_sample, ss``
-        Specify the number of the start sample for starting to apply the fade
-        effect. Default is 0.
-
-        ``nb_samples, ns``
-        Specify the number of samples for which the fade effect has to last.
-        At the end of the fade-in effect the output audio will have the same
-        volume as the input audio, at the end of the fade-out transition the
-        output audio will be silence. Default is 44100.
 
         ``start_time, st``
         Specify the start time of the fade effect. Default is 0. The value
@@ -159,115 +161,39 @@ class Automix():
         ``nofade``
             no fade applied
 
-        ``silence``
-        Set the initial gain for fade-in or final gain for fade-out. Default
-        value is ``0.0``.
+        volume
+        ~~~~~~
 
-        ``unity``
-        Set the initial gain for fade-out or final gain for fade-in. Default
-        value is ``1.0``.
+        Adjust the input audio volume.
 
-        lowpass
-        ~~~~~~~~
+        It accepts the following parameters:
 
-        Apply a low-pass filter with 3dB point frequency. The filter can be either single-pole or double-pole (the default). The filter roll off at 6dB per pole per octave (20dB per pole per decade).
+        ``volume``
+            Set audio volume expression.
 
-        The filter accepts the following options:
+            Output values are clipped to the maximum value.
 
-        ``frequency, f``
+            The output audio volume is given by the relation:
 
-        Set frequency in Hz. Default is 500.
+            .. container:: example
 
-        ``poles, p``
+                ::
 
-        Set number of poles. Default is 2.
+                    output_volume = volume * input_volume
 
-        ``width_type, t``
+            The default value for ``volume`` is "1.0".
 
-        Set method to specify band-width of filter.
 
-        ``h``
-        Hz
+        pitch
+        ~~~~~
 
-        ``q``
-        Q-Factor
+        Adjust the pitch without changing the tempo.
 
-        ``o``
-        octave
+        It accepts the following parameters:
 
-        ``s``
-        slope
+        ``pitch``
 
-        ``k``
-        kHz
-
-        ``width, w``
-
-        Specify the band-width of a filter in width_type units. Applies only to
-        double-pole filter. The default is 0.707q and gives a Butterworth
-        response.
-
-        ``mix, m``
-
-        How much to use filtered signal in output. Default is 1. Range is
-        between 0 and 1.
-
-        ``channels, c``
-
-        Specify which channels to filter, by default all available are filtered.
-
-        ``normalize, n``
-
-        Normalize biquad coefficients, by default is disabled. Enabling it will
-        normalize magnitude response at DC to 0dB.
-
-        ``transform, a``
-
-        Set transform type of IIR filter.
-
-        ``di``
-
-        ``dii``
-
-        ``tdi``
-
-        ``tdii``
-
-        ``latt``
-
-        ``svf``
-
-        ``zdf``
-
-        ``precision, r``
-
-        Set precison of filtering.
-
-        ``auto``
-        Pick automatic sample format depending on surround filters.
-
-        ``s16``
-        Always use signed 16-bit.
-
-        ``s32``
-        Always use signed 32-bit.
-
-        ``f32``
-        Always use float 32-bit.
-
-        ``f64``
-        Always use float 64-bit.
-
-        ``block_size, b``
-
-        Set block size used for reverse IIR processing. If this value is set to
-        high enough value (higher than impulse response length truncated when
-        reaches near zero values) filtering will become linear phase otherwise
-        if not big enough it will just produce nasty artifacts.
-
-        Note that filter delay will be exactly this many samples when set to
-        non-zero value.
-
+        Set pitch scale factor.
         """
 
         if "from" in filter:
@@ -276,10 +202,10 @@ class Automix():
 
             if enable_to:
                 enable = "between(t,{0},{1})".format(
-                    enable_from * bar_time, enable_to * bar_time)
+                    enable_from * bar_time, enable_to * bar_time
+                )
             else:
-                enable = "gte(t,{0})".format(
-                    enable_from * bar_time)
+                enable = "gte(t,{0})".format(enable_from * bar_time)
         else:
             enable = None
 
@@ -287,19 +213,11 @@ class Automix():
         filter_name = filter["name"]
 
         if filter_name == "fade":
-            kwargs["start_time"] = float(
-                filter["start_time"]) * bar_time
+            kwargs["start_time"] = float(filter["start_time"]) * bar_time
             kwargs["duration"] = float(filter["duration"]) * bar_time
             kwargs["curve"] = filter["curve"] if "curve" in filter else "tri"
             kwargs["type"] = filter["type"]
             filter_name = "afade"
-        elif filter_name == "lowpass":
-            kwargs["frequency"] = float(filter["frequency"])
-        elif filter_name == "highpass":
-            kwargs["frequency"] = float(filter["frequency"])
-        elif filter_name == "bandpass":
-            kwargs["frequency"] = float(filter["frequency"])
-            kwargs["width"] = float(filter["width"])
         elif filter_name == "volume":
             kwargs["volume"] = float(filter["volume"])
         elif filter_name == "pitch":
@@ -307,15 +225,17 @@ class Automix():
             kwargs["pitch"] = float(filter["pitch"])
             filter_name = "rubberband"
         elif "filters" in self.definition:
-            filter_name, kwargs = self.parse_filter(
-                [x for x in self.definition["filters"] if x["alias"] == filter_name][0], bar_time)
+            filter_name, kwargs = self._parse_filter(
+                [x for x in self.definition["filters"] if x["alias"] == filter_name][0],
+                bar_time,
+            )
         else:
             raise Exception('Filter not found "{0}"'.format(filter_name))
 
         return filter_name, kwargs
 
-    def create_mix_parts(self, parts, tempo, bars_global=None):
-        _logger.info('Creating mix parts')
+    def _create_mix_parts(self, parts, tempo, bars_global=None):
+        _logger.info("Creating mix parts")
         self.mix_parts = {}
         for name, part in parts.items():
             _logger.info('Creating mix part "{0}"'.format(name))
@@ -325,8 +245,7 @@ class Automix():
                     continue
                 c = self.clips[definition["name"]]
                 bar_time = (60 / tempo) * 4
-                bars_original = math.ceil(float(
-                    c.probe["duration"]) / bar_time)
+                bars_original = math.ceil(float(c.probe["duration"]) / bar_time)
                 bars_part = definition.get("bars", part.get("bars", bars_global))
                 diff = bars_part - bars_original
                 if diff >= 0:
@@ -358,39 +277,65 @@ class Automix():
                     clip = ffmpeg.filter(clip, "apad", pad_dur=offset * bar_time)
                     clip_time += offset * bar_time
                 clip = ffmpeg.filter(clip, "atrim", start=0, end=clip_time)
-                clip = ffmpeg.filter(clip, "aloop", loop=loop,
-                                     size=sample_rate * clip_time)
+                clip = ffmpeg.filter(
+                    clip, "aloop", loop=loop, size=sample_rate * clip_time
+                )
 
                 if "filters" in definition:
                     for filter in definition["filters"]:
-                        filter_name, kwargs = self.parse_filter(filter, bar_time)
+                        filter_name, kwargs = self._parse_filter(filter, bar_time)
                         clip = ffmpeg.filter(
-                            clip, filter_name, **{k: v for k, v in kwargs.items() if v is not None})
+                            clip,
+                            filter_name,
+                            **{k: v for k, v in kwargs.items() if v is not None}
+                        )
 
                 clips.append({"definition": definition, "clip": clip})
 
             weights = " ".join(
-                [str(x["definition"]["weight"] if "weight" in x["definition"] else "1") for x in clips])
-            _logger.debug('Using {0} clips "{1}" with weights "{2}"'.format(
-                len(clips), [x["definition"]["name"] for x in clips], weights))
+                [
+                    str(
+                        x["definition"]["weight"]
+                        if "weight" in x["definition"]
+                        else "1"
+                    )
+                    for x in clips
+                ]
+            )
+            _logger.debug(
+                'Using {0} clips "{1}" with weights "{2}"'.format(
+                    len(clips), [x["definition"]["name"] for x in clips], weights
+                )
+            )
 
             filename = os.path.join(self.parts_dir, "{0}.wav".format(name))
             _logger.info(
-                'Creating temporary file "{0}" for part "{1}"'.format(name, filename))
-            ffmpeg.filter([x["clip"] for x in clips], 'amix', weights=weights,
-                          inputs=len(clips), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
+                'Creating temporary file "{0}" for part "{1}"'.format(name, filename)
+            )
+            ffmpeg.filter(
+                [x["clip"] for x in clips],
+                "amix",
+                weights=weights,
+                inputs=len(clips),
+                normalize=False,
+            ).output(filename, loglevel=self.loglevel).run(
+                overwrite_output=self.overwrite_output
+            )
             self.mix_parts[name] = ffmpeg.input(filename)
 
-    def setup(self):
+    def _setup(self):
         _logger.info("Setting up automix")
-        self.load_clips()
+        self._load_clips()
         Path(self.parts_dir).mkdir(parents=True, exist_ok=True)
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
         Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
-        self.create_mix_parts(
-            self.definition["parts"], self.definition["original_tempo"], self.definition["bars"])
+        self._create_mix_parts(
+            self.definition["parts"],
+            self.definition["original_tempo"],
+            self.definition["bars"],
+        )
 
-    def create_mixes(self):
+    def _create_mixes(self):
         _logger.info("Creating mixes")
         self.mixes = {}
         for mix_name, definition in self.definition["mixes"].items():
@@ -399,39 +344,59 @@ class Automix():
             Path(mix_dir).mkdir(parents=True, exist_ok=True)
             for track in definition["segments"]:
                 weights = " ".join(
-                    [str(x["weight"] if "weight" in x else "1") for x in track["parts"]])
+                    [str(x["weight"] if "weight" in x else "1") for x in track["parts"]]
+                )
                 parts = [self.mix_parts[x["name"]] for x in track["parts"]]
-                _logger.debug('Using {0} parts "{1}" with weights "{2}"'.format(
-                    len(parts), [x["name"] for x in parts], weights))
+                _logger.debug(
+                    'Using {0} parts "{1}" with weights "{2}"'.format(
+                        len(parts), [x["name"] for x in parts], weights
+                    )
+                )
                 filename = os.path.join(mix_dir, "{0}.wav".format(track["name"]))
                 _logger.info(
-                    'Creating temporary file "{0}" for part "{1}"'.format(track["name"], filename))
-                ffmpeg.filter([x for x in parts], 'amix', weights=weights,
-                              inputs=len(parts), normalize=False).output(filename, loglevel=self.loglevel).run(overwrite_output=self.overwrite_output)
+                    'Creating temporary file "{0}" for part "{1}"'.format(
+                        track["name"], filename
+                    )
+                )
+                ffmpeg.filter(
+                    [x for x in parts],
+                    "amix",
+                    weights=weights,
+                    inputs=len(parts),
+                    normalize=False,
+                ).output(filename, loglevel=self.loglevel).run(
+                    overwrite_output=self.overwrite_output
+                )
                 mix.append(ffmpeg.input(filename))
-            self.mixes[mix_name] = ffmpeg.filter(
-                mix, 'concat', n=len(mix), v=0, a=1)
+            self.mixes[mix_name] = ffmpeg.filter(mix, "concat", n=len(mix), v=0, a=1)
             tempo = float(definition.get("tempo", self.definition.get("tempo", 1)))
             pitch = float(definition.get("pitch", self.definition.get("pitch", 1)))
             if tempo != 1 or pitch != 1:
                 self.mixes[mix_name] = ffmpeg.filter(
-                    self.mixes[mix_name], 'rubberband', tempo=tempo, pitch=pitch)
+                    self.mixes[mix_name], "rubberband", tempo=tempo, pitch=pitch
+                )
 
-    def render_mixes(self):
+    def _render_mixes(self):
         _logger.info("Rendering mixes")
         for mix_name, mix in self.mixes.items():
-            filename = os.path.join(self.output, "{0} ({1}).wav".format(
-                self.definition["name"], mix_name))
+            filename = os.path.join(
+                self.output, "{0} ({1}).wav".format(self.definition["name"], mix_name)
+            )
             _logger.info('Rendering mix to "{0}"'.format(filename))
             mix.output(filename, loglevel=self.loglevel).run(
-                overwrite_output=self.overwrite_output)
+                overwrite_output=self.overwrite_output
+            )
 
-    def cleanup(self):
+    def _cleanup(self):
         _logger.info("Cleaning up")
         shutil.rmtree(self.tmp_dir, ignore_errors=False)
 
     def run(self):
-        self.setup()
-        self.create_mixes()
-        self.render_mixes()
-        self.cleanup()
+        """
+        The generator method, sets up everything, creates temporary files, parts and renders the mixes.
+        """
+
+        self._setup()
+        self._create_mixes()
+        self._render_mixes()
+        self._cleanup()

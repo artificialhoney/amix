@@ -10,13 +10,7 @@ from setuptools import setup
 
 if __name__ == "__main__":
     try:
-        setup(use_scm_version={"version_scheme": "no-guess-dev"}, name='automix',
-              entry_points={
-                  'console_scripts': [
-                      'automix = automix.skeleton:run',
-                  ],
-        },
-        )
+        setup(use_scm_version={"version_scheme": "no-guess-dev"})
     except:  # noqa
         print(
             "\n\nAn error occurred while building the project, "

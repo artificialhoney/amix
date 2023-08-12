@@ -185,6 +185,7 @@ html_theme_options = {
 }
 
 html_show_sphinx = False
+html_title = "amix"
 
 pygments_style = "dracula"
 pygments_dark_style = "dracula"

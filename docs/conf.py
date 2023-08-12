@@ -163,12 +163,12 @@ html_theme_options = {
     "source_branch": "main",
     "source_directory": "docs/",
     "light_css_variables": {
-        "color-brand-primary": "#bd93f9",
-        "color-brand-content": "#bd93f9",
+        "color-brand-primary": "#ff79c6",
+        "color-brand-content": "#ff79c6",
     },
     "dark_css_variables": {
-        "color-brand-primary": "#bd93f9",
-        "color-brand-content": "#bd93f9",
+        "color-brand-primary": "#ff79c6",
+        "color-brand-content": "#ff79c6",
     },
     "footer_icons": [
         {

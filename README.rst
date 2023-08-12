@@ -10,24 +10,22 @@
     .. image:: https://img.shields.io/coveralls/github/<USER>/amix/main.svg
         :alt: Coveralls
         :target: https://coveralls.io/r/<USER>/amix
-    .. image:: https://img.shields.io/pypi/v/amix.svg
-        :alt: PyPI-Server
-        :target: https://pypi.org/project/amix/
     .. image:: https://img.shields.io/conda/vn/conda-forge/amix.svg
         :alt: Conda-Forge
         :target: https://anaconda.org/conda-forge/amix
-    .. image:: https://pepy.tech/badge/amix/month
-        :alt: Monthly Downloads
-        :target: https://pepy.tech/project/amix
     .. image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter
         :alt: Twitter
         :target: https://twitter.com/amix
 
+.. image:: https://img.shields.io/pypi/v/amix.svg
+    :alt: PyPI-Server
+    :target: https://pypi.org/project/amix/
+.. image:: https://pepy.tech/badge/amix/month
+    :alt: Monthly Downloads
+    :target: https://pepy.tech/project/amix
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
-
-|
 
 ====
 amix

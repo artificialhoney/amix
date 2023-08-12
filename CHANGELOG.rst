@@ -2,6 +2,30 @@ Changelog
 =========
 
 
+(unreleased)
+------------
+
+Feature
+~~~~~~~
+- Selectrrronic. [Sebastian Krüger]
+
+Fix
+~~~
+- Global bars optional. [Sebastian Krüger]
+
+Changes
+~~~~~~~
+- Salmon primary color. [Sebastian Krüger]
+- Theme colors. [Sebastian Krüger]
+- Docs theme colors. [Sebastian Krüger]
+- Change docs theme primary color. [Sebastian Krüger]
+- Changelog. [Sebastian Krüger]
+
+Other
+~~~~~
+- README. [Sebastian Krüger]
+
+
 0.1.2 (2023-08-12)
 ------------------
 

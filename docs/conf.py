@@ -163,12 +163,14 @@ html_theme_options = {
     "source_branch": "main",
     "source_directory": "docs/",
     "light_css_variables": {
-        "color-brand-primary": "#ff79c6",
-        "color-brand-content": "#ff79c6",
+        "color-brand-primary": "#6272a4",
+        "color-brand-content": "#6272a4",
+        "color-highlight-on-target": "#f1fa8c",
     },
     "dark_css_variables": {
-        "color-brand-primary": "#ff79c6",
-        "color-brand-content": "#ff79c6",
+        "color-brand-primary": "#6272a4",
+        "color-brand-content": "#6272a4",
+        "color-highlight-on-target": "#282a36",
     },
     "footer_icons": [
         {

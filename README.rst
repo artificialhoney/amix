@@ -17,6 +17,10 @@
         :alt: Twitter
         :target: https://twitter.com/amix
 
+====
+amix
+====
+
 .. image:: https://img.shields.io/pypi/v/amix.svg
     :alt: PyPI-Server
     :target: https://pypi.org/project/amix/
@@ -26,10 +30,6 @@
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
-
-====
-amix
-====
 
 Automatic mix of audio clips.
 

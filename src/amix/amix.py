@@ -332,7 +332,7 @@ class Amix:
         self._create_mix_parts(
             self.definition["parts"],
             self.definition["original_tempo"],
-            self.definition["bars"],
+            self.definition.get("bars", 16),
         )
 
     def _create_mixes(self):

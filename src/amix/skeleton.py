@@ -99,7 +99,6 @@ def setup_logging(loglevel):
 def main(args):
     """
     Wrapper allowing :func:`amix` to be called with string arguments in a CLI fashion
-
     """
     args = parse_args(args)
     setup_logging(args.loglevel)

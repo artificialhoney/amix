@@ -78,7 +78,10 @@ def test_create(snapshot):
         snapshot.assert_match(
             yaml.dump(
                 Amix.create(
-                    fixture, os.path.join(os.path.dirname(__file__), "tmp"), True
+                    fixture,
+                    os.path.join(os.path.dirname(__file__), "tmp"),
+                    True,
+                    parts_from_clips=True,
                 ).definition
             ),
             os.path.join(snapshots_dir, test_name + ".yml") + ".snapshot",

@@ -42,56 +42,19 @@ def _sha1_checksum(data: (str, bytearray, bytes, io.BufferedReader, io.FileIO)) 
         raise ValueError("invalid input. input must be string, byte or file")
 
 
-def _setup_clips(_clips):
-    clips = {}
-    types = ("*.mp3", "*.wav", "*.aif")
-    index = 0
-    for file in _clips:
-        file = os.path.realpath(file)
-        if os.path.isdir(file):
-            files_grabbed = []
-            for t in types:
-                files_grabbed.extend(glob.glob(os.path.join(file, t)))
-            for f in files_grabbed:
-                if os.path.isfile(f):
-                    path = f
-                    name = os.path.splitext(os.path.basename(f))[0]
-                    index += 1
-                    clips[name] = path
-        elif os.path.isfile(file):
-            path = file
-            name = os.path.splitext(os.path.basename(file))[0]
-            index += 1
-            clips[name] = path
-        return clips
-
-
-def _setup_parts(clips):
-    parts = {}
-    for clip in clips.keys():
-        parts[clip] = {"clips": [{"name": clip}]}
-    return parts
-
-
 def test_run(snapshot):
     """Test Amix().run"""
     fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
     for fixture in fixtures:
-        path = os.path.join(os.path.dirname(__file__), "fixtures")
         test_name = os.path.splitext(os.path.basename(fixture))[0]
-        with open(fixture) as f:
-            definition = yaml.safe_load(f)
-            definition["name"] = test_name
-            definition["clips"] = _setup_clips([os.path.join(path, "clips")])
-            definition["parts"] = (
-                definition["parts"]
-                if "parts" in definition
-                else _setup_parts(definition["clips"])
-            )
-
         snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
 
-        Amix(definition, os.path.join(os.path.dirname(__file__), "tmp"), True).run()
+        Amix.create(
+            fixture,
+            os.path.join(os.path.dirname(__file__), "tmp"),
+            True,
+            name=test_name,
+        ).run()
 
         snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(
@@ -100,5 +63,23 @@ def test_run(snapshot):
                     os.path.dirname(__file__), "tmp", test_name + " (main).wav"
                 )
             ),
-            os.path.join(snapshots_dir, test_name + " (main).wav") + ".snapshot",
+            os.path.join(snapshots_dir, test_name + ".wav") + ".snapshot",
+        )
+
+
+def test_create(snapshot):
+    """Test Amix.create"""
+    fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
+    for fixture in fixtures:
+        test_name = os.path.splitext(os.path.basename(fixture))[0]
+        snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+
+        snapshot.snapshot_dir = snapshots_dir
+        snapshot.assert_match(
+            yaml.dump(
+                Amix.create(
+                    fixture, os.path.join(os.path.dirname(__file__), "tmp"), True
+                ).definition
+            ),
+            os.path.join(snapshots_dir, test_name + ".yml") + ".snapshot",
         )

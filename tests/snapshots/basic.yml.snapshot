@@ -1,0 +1,271 @@
+clips:
+  backbeat: tests/fixtures/clips/backbeat.wav
+  bass: tests/fixtures/clips/bass.wav
+  bass1: tests/fixtures/clips/bass1.wav
+  conga: tests/fixtures/clips/conga.wav
+  hihat: tests/fixtures/clips/hihat.wav
+  lead: tests/fixtures/clips/lead.wav
+  pad: tests/fixtures/clips/pad.wav
+  pad_filtered: tests/fixtures/clips/pad_filtered.wav
+  shaker: tests/fixtures/clips/shaker.wav
+  snare: tests/fixtures/clips/snare.wav
+  snare1: tests/fixtures/clips/snare1.wav
+  snare_flanged: tests/fixtures/clips/snare_flanged.wav
+filters:
+- alias: fade_in
+  curve: tri
+  duration: 16
+  name: fade
+  start_time: 0
+  type: in
+- alias: fade_out
+  curve: tri
+  duration: 16
+  name: fade
+  start_time: 0
+  type: out
+- alias: volume_cut
+  from: 15.65
+  name: volume
+  to: 16
+  volume: 0
+mixes:
+  main:
+    segments:
+    - name: intro0
+      parts:
+      - name: backbeat
+    - name: intro1
+      parts:
+      - name: backbeat_with_bass
+    - name: intro2
+      parts:
+      - name: backbeat_with_bass_and_snare
+    - name: intro3
+      parts:
+      - name: backbeat_with_bass_and_snare
+      - name: hihat
+    - name: intro4
+      parts:
+      - name: backbeat_with_bass_and_snare
+      - name: hihat
+      - name: percussion
+    - name: intro5
+      parts:
+      - name: backbeat_with_bass_and_snare
+      - name: hihat
+      - name: percussion
+      - name: snare
+    - name: main1
+      parts:
+      - name: backbeat_with_bass_and_snare_break
+      - name: hihat
+      - name: percussion
+      - name: snare_fade_out
+      - name: snare_flanged_fade_in
+      - name: pad_fade_in
+      - name: lead_fade_in
+    - name: main3
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: hihat
+      - name: percussion
+      - name: bassline
+      - name: snare_flanged
+      - name: pad
+      - name: lead
+    - name: main4
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: hihat
+      - name: percussion
+      - name: bassline
+      - name: snare_flanged
+      - name: pad_fade_out
+      - name: pad_filtered_fade_in
+      - name: lead
+    - name: main6
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: hihat
+      - name: percussion
+      - name: bassline
+      - name: snare_flanged
+      - name: pad_filtered
+      - name: lead
+    - name: outro0
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: hihat
+      - name: bassline
+      - name: snare_flanged
+      - name: pad_filtered
+      - name: lead
+    - name: outro1
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: hihat
+      - name: bassline
+      - name: snare
+      - name: pad_filtered
+      - name: lead
+    - name: outro2
+      parts:
+      - name: backbeat_with_bass_and_snare_full
+      - name: bassline
+      - name: snare
+      - name: pad_filtered
+      - name: lead
+    - name: outro3
+      parts:
+      - name: backbeat_with_bass_full
+      - name: bassline
+      - name: snare
+      - name: pad_filtered
+      - name: lead
+    - name: outro4
+      parts:
+      - name: backbeat_with_bass_full
+      - name: bassline
+      - name: pad_filtered
+      - name: lead
+    - name: outro5
+      parts:
+      - name: backbeat
+      - name: pad_filtered
+      - name: lead
+    - name: outro6
+      parts:
+      - name: pad_filtered_fade_out
+      - name: lead_fade_out
+name: Basic
+original_tempo: 180
+parts:
+  backbeat:
+    bars: 16
+    clips:
+    - filters:
+      - name: volume_cut
+      name: backbeat
+  backbeat_with_bass:
+    bars: 16
+    clips:
+    - bars: 8
+      name: bass
+    - filters:
+      - name: volume_cut
+      name: backbeat
+  backbeat_with_bass_and_snare:
+    bars: 16
+    clips:
+    - bars: 8
+      name: bass
+    - filters:
+      - name: volume_cut
+      name: backbeat
+    - filters:
+      - name: volume_cut
+      name: snare1
+  backbeat_with_bass_and_snare_break:
+    bars: 16
+    clips:
+    - name: bass
+    - filters:
+      - name: volume_cut
+      name: backbeat
+    - filters:
+      - name: volume_cut
+      name: snare1
+  backbeat_with_bass_and_snare_full:
+    bars: 16
+    clips:
+    - name: bass
+    - name: backbeat
+    - name: snare1
+  backbeat_with_bass_full:
+    bars: 16
+    clips:
+    - name: bass
+    - name: backbeat
+  bassline:
+    bars: 16
+    clips:
+    - name: bass1
+  hihat:
+    bars: 16
+    clips:
+    - name: hihat
+  lead:
+    bars: 16
+    clips:
+    - name: lead
+  lead_fade_in:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_in
+      name: lead
+  lead_fade_out:
+    bars: 16
+    clips:
+    - bars: 4
+      filters:
+      - name: fade_out
+      name: lead
+  pad:
+    bars: 16
+    clips:
+    - name: pad
+  pad_fade_in:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_in
+      name: pad
+  pad_fade_out:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_out
+      name: pad
+  pad_filtered:
+    bars: 16
+    clips:
+    - name: pad_filtered
+  pad_filtered_fade_in:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_in
+      name: pad_filtered
+  pad_filtered_fade_out:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_out
+      name: pad_filtered
+  percussion:
+    bars: 16
+    clips:
+    - name: shaker
+    - name: conga
+  snare:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_out
+      name: snare
+  snare_fade_out:
+    bars: 16
+    clips:
+    - name: snare
+  snare_flanged:
+    bars: 16
+    clips:
+    - name: snare_flanged
+  snare_flanged_fade_in:
+    bars: 16
+    clips:
+    - filters:
+      - name: fade_in
+      name: snare_flanged

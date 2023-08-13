@@ -25,18 +25,6 @@ _logger = logging.getLogger(__name__)
 # executable/script.
 
 
-def merge(a: dict, b: dict, path=[]):
-    for key in b:
-        if key in a:
-            if isinstance(a[key], dict) and isinstance(b[key], dict):
-                merge(a[key], b[key], path + [str(key)])
-            elif a[key] != b[key]:
-                raise Exception("Conflict at " + ".".join(path + [str(key)]))
-        else:
-            a[key] = b[key]
-    return a
-
-
 def parse_args(args):
     """
     Parse command line parameters
@@ -127,106 +115,20 @@ def main(args):
     setup_logging(args.loglevel)
     _logger.info("Starting amix")
 
-    with open(args.definition) as f:
-        definition = yaml.safe_load(f)
-        if args.data != None:
-            data = {}
-            for d in args.data:
-                split = d.split("=")
-                key = split[0]
-                val = split[1]
-                data[key] = val
+    Amix.create(
+        args.definition,
+        args.output,
+        args.yes,
+        args.loglevel,
+        args.cleanup,
+        args.clip,
+        args.data,
+        args.alias,
+        args.name,
+        args.parts_from_clips,
+    ).run()
 
-            if "original_tempo" in definition:
-                template = Template(definition["original_tempo"])
-                definition["original_tempo"] = float(template.render(data))
-
-            if "bars" in definition:
-                template = Template(definition["bars"])
-                definition["bars"] = float(template.render(data))
-
-            if "tempo" in definition:
-                template = Template(definition["tempo"])
-                definition["tempo"] = float(template.render(data))
-
-            if "pitch" in definition:
-                template = Template(definition["pitch"])
-                definition["pitch"] = float(template.render(data))
-
-            for part in definition["parts"].values():
-                if "bars" in part:
-                    template = Template(part["bars"])
-                    part["bars"] = float(template.render(data))
-
-                for clip in part["clips"]:
-                    if "bars" in clip:
-                        template = Template(clip["bars"])
-                        clip["bars"] = float(template.render(data))
-
-            for filter in definition["filters"]:
-                for field in ["duration", "from", "to"]:
-                    if field in filter:
-                        template = Template(filter[field])
-                        filter[field] = float(template.render(data))
-
-        clips = {}
-        types = ("*.mp3", "*.wav", "*.aif")
-        index = 0
-
-        if args.clip and len(args.clip) > 0:
-            for file in args.clip:
-                file = os.path.realpath(file)
-                if os.path.isdir(file):
-                    files_grabbed = []
-                    for t in types:
-                        files_grabbed.extend(glob.glob(os.path.join(file, t)))
-                    for f in files_grabbed:
-                        if os.path.isfile(f):
-                            path = f
-                            name = (
-                                os.path.splitext(os.path.basename(f))[0]
-                                if index not in args.alias
-                                else args.alias[index]
-                            )
-                            index += 1
-                            clips[name] = path
-                elif os.path.isfile(file):
-                    path = file
-                    name = (
-                        os.path.splitext(os.path.basename(file))[0]
-                        if index not in args.alias
-                        else args.alias[index]
-                    )
-                    index += 1
-                    clips[name] = path
-
-        if not "clips" in definition:
-            if len(clips.values()) > 0:
-                definition["clips"] = clips
-            else:
-                definition["clips"] = {}
-        elif len(clips.values()) > 0:
-            definition["clips"] = merge(definition["clips"], clips)
-
-        if args.parts_from_clips:
-            parts = {}
-            for clip in definition["clips"].keys():
-                parts[clip] = {"clips": [{"name": clip}]}
-            definition["parts"] = (
-                merge(definition["parts"], parts) if "parts" in definition else parts
-            )
-
-        if args.name:
-            definition["name"] = args.name
-
-    try:
-        with open(os.path.join(os.path.dirname(__file__), "amix.json")) as f:
-            schema = json.load(f)
-        jsonschema.validate(definition, schema)
-        Amix(definition, args.output, args.yes, args.loglevel, args.cleanup).run()
-        _logger.info("Done amix")
-    except jsonschema.exceptions.ValidationError:
-        _logger.exception("Error while parsing amix definition file")
+    _logger.info("Done amix")
 
 
 def run():

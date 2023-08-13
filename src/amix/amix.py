@@ -1,3 +1,5 @@
+import glob
+import json
 import logging
 import math
 import os
@@ -6,6 +8,10 @@ import shutil
 from pathlib import Path
 
 import ffmpeg
+import jsonschema
+import yaml
+from jinja2 import Template
+from mergedeep import merge
 
 _logger = logging.getLogger(__name__)
 
@@ -27,6 +33,129 @@ class Amix:
     """
     Amix itself.
     """
+
+    def create(
+        config,
+        output,
+        yes=False,
+        loglevel=logging.CRITICAL,
+        cleanup=True,
+        clip=None,
+        data=None,
+        alias=None,
+        name=None,
+        parts_from_clips=False,
+    ):
+        if not clip:
+            clip = [os.path.dirname(config) + "/clips"]
+        if not alias:
+            alias = []
+        with open(config) as f:
+            definition = yaml.safe_load(f)
+        if data != None:
+            new_data = {}
+            for d in data:
+                split = d.split("=")
+                key = split[0]
+                val = split[1]
+                new_data[key] = val
+
+            if "original_tempo" in definition:
+                template = Template(definition["original_tempo"])
+                definition["original_tempo"] = float(template.render(new_data))
+
+            if "bars" in definition:
+                template = Template(definition["bars"])
+                definition["bars"] = float(template.render(new_data))
+
+            if "tempo" in definition:
+                template = Template(definition["tempo"])
+                definition["tempo"] = float(template.render(new_data))
+
+            if "pitch" in definition:
+                template = Template(definition["pitch"])
+                definition["pitch"] = float(template.render(new_data))
+
+            if "parts" in definition:
+                for part in definition["parts"].values():
+                    if "bars" in part:
+                        template = Template(part["bars"])
+                        part["bars"] = float(template.render(new_data))
+
+                    for clip in part["clips"]:
+                        if "bars" in clip:
+                            template = Template(clip["bars"])
+                            clip["bars"] = float(template.render(new_data))
+
+            if "filters" in definition:
+                for filter in definition["filters"]:
+                    for field in ["duration", "from", "to"]:
+                        if field in filter:
+                            template = Template(filter[field])
+                            filter[field] = float(template.render(new_data))
+
+        clips = {}
+        types = ("*.mp3", "*.wav", "*.aif")
+        index = 0
+
+        if clip and len(clip) > 0:
+            for file in clip:
+                file = os.path.relpath(file)
+                if os.path.isdir(file):
+                    files_grabbed = []
+                    for t in types:
+                        files_grabbed.extend(
+                            sorted(
+                                glob.glob(os.path.join(file, t)), key=os.path.getmtime
+                            )
+                        )
+                    for f in files_grabbed:
+                        if os.path.isfile(f):
+                            path = f
+                            title = (
+                                os.path.splitext(os.path.basename(f))[0]
+                                if index not in alias
+                                else alias[index]
+                            )
+                            index += 1
+                            clips[title] = path
+                elif os.path.isfile(file):
+                    path = file
+                    title = (
+                        os.path.splitext(os.path.basename(file))[0]
+                        if index not in alias
+                        else alias[index]
+                    )
+                    index += 1
+                    clips[title] = path
+
+        if not "clips" in definition:
+            if len(clips.values()) > 0:
+                definition["clips"] = clips
+            else:
+                definition["clips"] = {}
+        elif len(clips.values()) > 0:
+            definition["clips"] = merge(definition["clips"], clips)
+
+        if parts_from_clips:
+            parts = {}
+            for clip in definition["clips"].keys():
+                parts[clip] = {"clips": [{"name": clip}]}
+            definition["parts"] = (
+                merge(definition["parts"], parts) if "parts" in definition else parts
+            )
+
+        if name:
+            definition["name"] = name
+
+        try:
+            with open(os.path.join(os.path.dirname(__file__), "amix.json")) as f:
+                schema = json.load(f)
+            jsonschema.validate(definition, schema)
+            return Amix(definition, output, yes, loglevel, cleanup)
+        except jsonschema.exceptions.ValidationError as e:
+            _logger.exception("Error while parsing amix definition file")
+            raise e
 
     def __init__(
         self,

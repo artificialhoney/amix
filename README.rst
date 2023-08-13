@@ -67,3 +67,7 @@ Check out the `examples` folder. I also uploaded my result to SoundCloud_.
 .. code-block::
 
     cd examples/heidelberg && amix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"
+
+.. code-block::
+
+    cd examples/selectrrronic && amix --parts_to_clips III.yml

@@ -82,6 +82,9 @@ def parse_args(args):
     )
     parser.add_argument("-n", "--name", help="Overwrite name in config")
     parser.add_argument(
+        "-p", "--parts_from_clips", help="Create parts from clips", action="store_true"
+    )
+    parser.add_argument(
         "-y",
         "--yes",
         help="Overwrite output files without asking.",
@@ -192,6 +195,14 @@ def main(args):
                 definition["clips"] = {}
         elif len(clips.values()) > 0:
             definition["clips"] = definition["clips"] | clips
+
+        if args.parts_from_clips:
+            parts = {}
+            for clip in definition["clips"].keys():
+                parts[clip] = {"clips": [{"name": clip}]}
+            definition["parts"] = (
+                definition["parts"] | parts if "parts" in definition else parts
+            )
 
         if args.name:
             definition["name"] = args.name

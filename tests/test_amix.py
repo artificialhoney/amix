@@ -42,7 +42,7 @@ def _sha1_checksum(data: (str, bytearray, bytes, io.BufferedReader, io.FileIO)) 
         raise ValueError("invalid input. input must be string, byte or file")
 
 
-def _setup(_clips):
+def _setup_clips(_clips):
     clips = {}
     types = ("*.mp3", "*.wav", "*.aif")
     index = 0
@@ -66,6 +66,13 @@ def _setup(_clips):
         return clips
 
 
+def _setup_parts(clips):
+    parts = {}
+    for clip in clips.keys():
+        parts[clip] = {"clips": [{"name": clip}]}
+    return parts
+
+
 def test_run(snapshot):
     """Test Amix().run"""
     for name, version in [
@@ -73,21 +80,23 @@ def test_run(snapshot):
         ("milano", "amix"),
         ("selectrrronic", "I"),
         ("selectrrronic", "II"),
+        ("selectrrronic", "III"),
     ]:
         path = os.path.join(os.path.dirname(__file__), "..", "examples", name)
         test_name = "test_" + name + "_" + version
         with open(os.path.join(path, version + ".yml")) as f:
             definition = yaml.safe_load(f)
             definition["name"] = test_name
-            definition["clips"] = _setup([os.path.join(path, "clips")])
+            definition["clips"] = _setup_clips([os.path.join(path, "clips")])
+            definition["parts"] = (
+                definition["parts"]
+                if "parts" in definition
+                else _setup_parts(definition["clips"])
+            )
+
         snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
 
-        Amix(
-            definition,
-            os.path.join(os.path.dirname(__file__), "tmp"),
-            False,
-            logging.DEBUG,
-        ).run()
+        Amix(definition, os.path.join(os.path.dirname(__file__), "tmp"), True).run()
 
         snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(

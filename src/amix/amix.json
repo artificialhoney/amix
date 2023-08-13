@@ -34,7 +34,7 @@
           "$ref": "#/definitions/mixes"
         }
       },
-      "required": ["mixes", "name", "original_tempo", "parts"],
+      "required": ["mixes", "name", "original_tempo"],
       "title": "Amix"
     },
     "clips": {

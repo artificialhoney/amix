@@ -177,8 +177,8 @@ html_theme_options = {
         "color-highlight-on-target": "#282a36",
         "color-api-name": "#ff7b7b",
         "color-api-pre-name": "#ff7b7b",
-        "color-background-primary": "#282a36",
-        "color-background-secondary": "#282a36",
+        "color-background-primary": "#17151E",
+        "color-background-secondary": "#17151E",
         "color-sidebar-item-background--hover": "#44475a",
         "color-sidebar-item-expander-background--hover": "#44475a",
     },
@@ -199,8 +199,8 @@ html_theme_options = {
 html_show_sphinx = False
 html_title = "amix"
 
-pygments_style = "one-dark"
-pygments_dark_style = "one-dark"
+pygments_style = "dracula"
+pygments_dark_style = "dracula"
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
@@ -226,9 +226,13 @@ pygments_dark_style = "one-dark"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
+html_css_files = [
+    "css/custom.css",
+]
+
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-# html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = "%Y"
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.

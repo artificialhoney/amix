@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-(unreleased)
-------------
+0.1.4 (2023-08-13)
+------------------
 
 Feature
 ~~~~~~~
@@ -22,6 +22,7 @@ Changes
 
 Other
 ~~~~~
+- CHANGELOG. [Sebastian Krüger]
 - README. [Sebastian Krüger]
 
 

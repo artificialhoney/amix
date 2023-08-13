@@ -27,6 +27,9 @@ amix
 .. image:: https://pepy.tech/badge/amix/month
     :alt: Monthly Downloads
     :target: https://pepy.tech/project/amix
+.. image:: https://github.com/artificialhoney/amix/actions/workflows/test.yml/badge.svg
+   :alt: Test
+   :target: https://github.com/artificialhoney/amix/actions/workflows/test.yml
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/

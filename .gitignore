@@ -53,8 +53,9 @@ MANIFEST
 .conda*/
 .python-version
 
-examples/*/parts
-examples/*/mix
-examples/*/*.wav
+examples/**/parts
+examples/**/mix
+examples/**/*.wav
+!examples/*/clips
 
 tmp

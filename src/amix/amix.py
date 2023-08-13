@@ -49,7 +49,7 @@ class Amix:
         self.overwrite_output = overwrite_output
         self.parts_dir = os.path.join(self.output, self.name, "parts")
         self.mix_dir = os.path.join(self.output, self.name, "mix")
-        self.tmp_dir = os.path.join(self.mix_dir, self.name, "tmp")
+        self.tmp_dir = os.path.join(self.output, self.name, "tmp")
         if loglevel == logging.DEBUG:
             self.loglevel = "debug"
         elif loglevel == logging.INFO:
@@ -203,6 +203,17 @@ class Amix:
         ``pitch``
 
         Set pitch scale factor.
+
+        tempo
+        ~~~~~
+
+        Adjust the tempo without changing the pitch.
+
+        It accepts the following parameters:
+
+        ``tempo``
+
+        Set tempo scale factor.
         """
 
         if "from" in filter:
@@ -232,6 +243,10 @@ class Amix:
         elif filter_name == "pitch":
             kwargs["tempo"] = 1.0
             kwargs["pitch"] = float(filter["pitch"])
+            filter_name = "rubberband"
+        elif filter_name == "tempo":
+            kwargs["tempo"] = float(filter["tempo"])
+            kwargs["pitch"] = 1.0
             filter_name = "rubberband"
         elif "filters" in self.definition:
             filter_name, kwargs = self._parse_filter(

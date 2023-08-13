@@ -1,87 +1,104 @@
 name: Selectrrronic II
 original_tempo: 140
+pitch: 0.9
+bars: 8
 filters:
   - name: fade
     alias: fade_in
     type: in
     curve: tri
     start_time: 0
-    duration: 16
+    duration: 8
   - name: fade
     alias: fade_out
     type: out
     curve: tri
     start_time: 0
-    duration: 16
+    duration: 8
   - name: volume
     alias: volume_cut
     volume: 0
-    from: 15.65
-    to: 16
+    from: 7.7
+    to: 8
+  - name: tempo
+    alias: breakbeat_tempo
+    tempo: 0.77777777777
+
 parts:
-  backbeat:
+  sends:
     clips:
-      - name: backbeat
+      - name: reverb
+      - name: delay
+      - name: phaser
+  breakbeat:
+    clips:
+      - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
-  backbeat_with_bass:
+      - name: reverb
+      - name: delay
+  breakbeat_with_bass:
     clips:
-      - name: bass
-      - name: backbeat
+      - name: bass0
+      - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
-  backbeat_with_bass_and_effect0:
+      - name: reverb
+      - name: delay
+  breakbeat_with_bass_and_kick:
     clips:
-      - name: bass
-      - name: backbeat
+      - name: bass0
+      - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: kick
         filters:
           - name: volume_cut
-  backbeat_with_bass_and_effect0_break:
+      - name: reverb
+      - name: delay
+  breakbeat_with_bass_and_kick_break:
     clips:
-      - name: bass
-      - name: backbeat
+      - name: bass0
+      - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: kick
         filters:
           - name: volume_cut
-  backbeat_with_bass_full:
+      - name: reverb
+      - name: delay
+  breakbeat_with_bass_full:
     clips:
-      - name: bass
-      - name: backbeat
-  backbeat_with_bass_and_effect0_full:
+      - name: bass0
+      - name: breakbeat
+        filters:
+          - name: breakbeat_tempo
+      - name: reverb
+      - name: delay
+      - name: phaser
+  breakbeat_with_bass_and_kick_full:
     clips:
-      - name: bass
-      - name: backbeat
+      - name: bass0
+      - name: breakbeat
+        filters:
+          - name: breakbeat_tempo
       - name: kick
+      - name: reverb
+      - name: delay
+      - name: phaser
   hihat:
     clips:
       - name: hihat
   percussion:
     clips:
-      - name: shaker
+      - name: breakbeat_shaker
   bassline:
     clips:
-      - name: bass0
-  effect0:
-    clips:
-      - name: effect0
-        filters:
-          - name: fade_out
-  effect0_fade_out:
-    clips:
-      - name: effect0
-  effect1:
-    clips:
-      - name: effect1
-  effect1_fade_in:
-    clips:
-      - name: effect1
-        filters:
-          - name: fade_in
+      - name: bass1
   pad:
     clips:
       - name: pad
@@ -126,104 +143,76 @@ mixes:
     segments:
       - name: intro0
         parts:
-          - name: backbeat
+          - name: breakbeat
       - name: intro1
         parts:
-          - name: backbeat_with_bass
+          - name: breakbeat_with_bass
       - name: intro2
         parts:
-          - name: backbeat_with_bass_and_effect0
+          - name: breakbeat_with_bass_and_kick
       - name: intro3
         parts:
-          - name: backbeat_with_bass_and_effect0
+          - name: breakbeat_with_bass_and_kick
           - name: hihat
       - name: intro4
         parts:
-          - name: backbeat_with_bass_and_effect0
+          - name: breakbeat_with_bass_and_kick
           - name: hihat
           - name: percussion
-      - name: intro5
-        parts:
-          - name: backbeat_with_bass_and_effect0
-          - name: hihat
-          - name: percussion
-          - name: effect0
       - name: main1
         parts:
-          - name: backbeat_with_bass_and_effect0_break
+          - name: breakbeat_with_bass_and_kick_break
           - name: hihat
           - name: percussion
-          - name: effect0_fade_out
-          - name: effect1_fade_in
           - name: pad_fade_in
           - name: lead_fade_in
       - name: main3
         parts:
-          - name: backbeat_with_bass_and_effect0_full
+          - name: breakbeat_with_bass_and_kick_full
           - name: hihat
           - name: percussion
           - name: bassline
-          - name: effect1
           - name: pad
           - name: lead
       - name: main4
         parts:
-          - name: backbeat_with_bass_and_effect0_full
+          - name: breakbeat_with_bass_and_kick_full
           - name: hihat
           - name: percussion
           - name: bassline
-          - name: effect1
           - name: pad_fade_out
           - name: pad_filtered_fade_in
           - name: lead
       - name: main6
         parts:
-          - name: backbeat_with_bass_and_effect0_full
+          - name: breakbeat_with_bass_and_kick_full
           - name: hihat
           - name: percussion
           - name: bassline
-          - name: effect1
           - name: pad_filtered
           - name: lead
       - name: outro0
         parts:
-          - name: backbeat_with_bass_and_effect0_full
+          - name: breakbeat_with_bass_and_kick_full
           - name: hihat
           - name: bassline
-          - name: effect1
-          - name: pad_filtered
-          - name: lead
-      - name: outro1
-        parts:
-          - name: backbeat_with_bass_and_effect0_full
-          - name: hihat
-          - name: bassline
-          - name: effect0
           - name: pad_filtered
           - name: lead
       - name: outro2
         parts:
-          - name: backbeat_with_bass_and_effect0_full
+          - name: breakbeat_with_bass_and_kick_full
           - name: bassline
-          - name: effect0
           - name: pad_filtered
           - name: lead
       - name: outro3
         parts:
-          - name: backbeat_with_bass_full
-          - name: bassline
-          - name: effect0
-          - name: pad_filtered
-          - name: lead
-      - name: outro4
-        parts:
-          - name: backbeat_with_bass_full
+          - name: breakbeat_with_bass_full
           - name: bassline
           - name: pad_filtered
           - name: lead
       - name: outro5
         parts:
-          - name: backbeat
+          - name: breakbeat
           - name: pad_filtered
           - name: lead
       - name: outro6

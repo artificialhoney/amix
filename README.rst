@@ -70,4 +70,4 @@ Check out the `examples` folder. I also uploaded my result to SoundCloud_.
 
 .. code-block::
 
-    cd examples/selectrrronic && amix --parts_to_clips III.yml
+    cd examples/selectrrronic && amix --parts_from_clips III.yml

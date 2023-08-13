@@ -25,6 +25,18 @@ _logger = logging.getLogger(__name__)
 # executable/script.
 
 
+def merge(a: dict, b: dict, path=[]):
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key], path + [str(key)])
+            elif a[key] != b[key]:
+                raise Exception("Conflict at " + ".".join(path + [str(key)]))
+        else:
+            a[key] = b[key]
+    return a
+
+
 def parse_args(args):
     """
     Parse command line parameters
@@ -194,14 +206,14 @@ def main(args):
             else:
                 definition["clips"] = {}
         elif len(clips.values()) > 0:
-            definition["clips"] = definition["clips"] | clips
+            definition["clips"] = merge(definition["clips"], clips)
 
         if args.parts_from_clips:
             parts = {}
             for clip in definition["clips"].keys():
                 parts[clip] = {"clips": [{"name": clip}]}
             definition["parts"] = (
-                definition["parts"] | parts if "parts" in definition else parts
+                merge(definition["parts"], parts) if "parts" in definition else parts
             )
 
         if args.name:

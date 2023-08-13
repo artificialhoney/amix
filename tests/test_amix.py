@@ -1,5 +1,7 @@
 import glob
 import hashlib
+import io
+import logging
 import os
 
 import pytest
@@ -10,6 +12,34 @@ from amix.amix import Amix
 __author__ = "Sebastian Krüger"
 __copyright__ = "Sebastian Krüger"
 __license__ = "MIT"
+
+
+def _sha1_checksum(data: (str, bytearray, bytes, io.BufferedReader, io.FileIO)) -> str:
+    """
+    create sha1 checksum
+    :param data: input data to check sha1 checksum
+    :type data: str, bytearray, bytes, io.BufferedReader, io.FileIO
+    :return: sha1 hash
+    :rtype: str
+    """
+    # byte
+    if isinstance(data, (bytes, bytearray)):
+        return hashlib.sha1(data).hexdigest()
+
+    # file
+    elif isinstance(data, str) and os.access(data, os.R_OK):
+        return hashlib.sha1(open(data, "rb").read()).hexdigest()
+
+    # file object
+    elif isinstance(data, (io.BufferedReader, io.FileIO)):
+        return hashlib.sha1(data.read()).hexdigest()
+
+    # string
+    elif isinstance(data, str):
+        return hashlib.sha1(data.encode()).hexdigest()
+
+    else:
+        raise ValueError("invalid input. input must be string, byte or file")
 
 
 def _setup(_clips):
@@ -36,14 +66,6 @@ def _setup(_clips):
         return clips
 
 
-def _md5(fname):
-    hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
-
-
 def test_run(snapshot):
     """Test Amix().run"""
     for name, version in [
@@ -59,10 +81,17 @@ def test_run(snapshot):
             definition["name"] = test_name
             definition["clips"] = _setup([os.path.join(path, "clips")])
         snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
-        Amix(definition, os.path.join(os.path.dirname(__file__), "tmp"), True).run()
+
+        Amix(
+            definition,
+            os.path.join(os.path.dirname(__file__), "tmp"),
+            False,
+            logging.DEBUG,
+        ).run()
+
         snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(
-            _md5(
+            _sha1_checksum(
                 os.path.join(
                     os.path.dirname(__file__), "tmp", test_name + " (main).wav"
                 )

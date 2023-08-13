@@ -75,16 +75,11 @@ def _setup_parts(clips):
 
 def test_run(snapshot):
     """Test Amix().run"""
-    for name, version in [
-        ("mannheim", "amix"),
-        ("milano", "amix"),
-        ("selectrrronic", "I"),
-        ("selectrrronic", "II"),
-        ("selectrrronic", "III"),
-    ]:
-        path = os.path.join(os.path.dirname(__file__), "..", "examples", name)
-        test_name = "test_" + name + "_" + version
-        with open(os.path.join(path, version + ".yml")) as f:
+    fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
+    for fixture in fixtures:
+        path = os.path.join(os.path.dirname(__file__), "fixtures")
+        test_name = os.path.splitext(os.path.basename(fixture))[0]
+        with open(fixture) as f:
             definition = yaml.safe_load(f)
             definition["name"] = test_name
             definition["clips"] = _setup_clips([os.path.join(path, "clips")])

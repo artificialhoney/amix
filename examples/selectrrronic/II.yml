@@ -1,5 +1,7 @@
 name: Selectrrronic II
 original_tempo: 140
+tempo: 1.14285714286
+pitch: 0.9
 bars: 8
 filters:
   - name: fade
@@ -17,8 +19,11 @@ filters:
   - name: volume
     alias: volume_cut
     volume: 0
-    from: 7.7
+    from: 7.65
     to: 8
+  - name: tempo
+    alias: breakbeat_tempo
+    tempo: 0.77777777777
 
 parts:
   sends:
@@ -30,6 +35,7 @@ parts:
     clips:
       - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: reverb
       - name: delay
@@ -38,6 +44,7 @@ parts:
       - name: bass0
       - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: reverb
       - name: delay
@@ -46,6 +53,7 @@ parts:
       - name: bass0
       - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: kick
         filters:
@@ -57,6 +65,7 @@ parts:
       - name: bass0
       - name: breakbeat
         filters:
+          - name: breakbeat_tempo
           - name: volume_cut
       - name: kick
         filters:
@@ -67,6 +76,8 @@ parts:
     clips:
       - name: bass0
       - name: breakbeat
+        filters:
+          - name: breakbeat_tempo
       - name: reverb
       - name: delay
       - name: phaser
@@ -74,6 +85,8 @@ parts:
     clips:
       - name: bass0
       - name: breakbeat
+        filters:
+          - name: breakbeat_tempo
       - name: kick
       - name: reverb
       - name: delay
@@ -83,7 +96,7 @@ parts:
       - name: hihat
   percussion:
     clips:
-      - name: breakbeat_shaker
+      - name: shaker
   bassline:
     clips:
       - name: bass1

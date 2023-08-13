@@ -1,0 +1,232 @@
+name: Selectrrronic II
+original_tempo: 140
+filters:
+  - name: fade
+    alias: fade_in
+    type: in
+    curve: tri
+    start_time: 0
+    duration: 16
+  - name: fade
+    alias: fade_out
+    type: out
+    curve: tri
+    start_time: 0
+    duration: 16
+  - name: volume
+    alias: volume_cut
+    volume: 0
+    from: 15.65
+    to: 16
+parts:
+  backbeat:
+    clips:
+      - name: backbeat
+        filters:
+          - name: volume_cut
+  backbeat_with_bass:
+    clips:
+      - name: bass
+      - name: backbeat
+        filters:
+          - name: volume_cut
+  backbeat_with_bass_and_effect0:
+    clips:
+      - name: bass
+      - name: backbeat
+        filters:
+          - name: volume_cut
+      - name: kick
+        filters:
+          - name: volume_cut
+  backbeat_with_bass_and_effect0_break:
+    clips:
+      - name: bass
+      - name: backbeat
+        filters:
+          - name: volume_cut
+      - name: kick
+        filters:
+          - name: volume_cut
+  backbeat_with_bass_full:
+    clips:
+      - name: bass
+      - name: backbeat
+  backbeat_with_bass_and_effect0_full:
+    clips:
+      - name: bass
+      - name: backbeat
+      - name: kick
+  hihat:
+    clips:
+      - name: hihat
+  percussion:
+    clips:
+      - name: shaker
+  bassline:
+    clips:
+      - name: bass0
+  effect0:
+    clips:
+      - name: effect0
+        filters:
+          - name: fade_out
+  effect0_fade_out:
+    clips:
+      - name: effect0
+  effect1:
+    clips:
+      - name: effect1
+  effect1_fade_in:
+    clips:
+      - name: effect1
+        filters:
+          - name: fade_in
+  pad:
+    clips:
+      - name: pad
+  pad_fade_in:
+    clips:
+      - name: pad
+        filters:
+          - name: fade_in
+  pad_fade_out:
+    clips:
+      - name: pad
+        filters:
+          - name: fade_out
+  pad_filtered:
+    clips:
+      - name: pad_filtered
+  pad_filtered_fade_in:
+    clips:
+      - name: pad_filtered
+        filters:
+          - name: fade_in
+  pad_filtered_fade_out:
+    clips:
+      - name: pad_filtered
+        filters:
+          - name: fade_out
+  lead:
+    clips:
+      - name: lead
+  lead_fade_in:
+    clips:
+      - name: lead
+        filters:
+          - name: fade_in
+  lead_fade_out:
+    clips:
+      - name: lead
+        filters:
+          - name: fade_out
+mixes:
+  main:
+    segments:
+      - name: intro0
+        parts:
+          - name: backbeat
+      - name: intro1
+        parts:
+          - name: backbeat_with_bass
+      - name: intro2
+        parts:
+          - name: backbeat_with_bass_and_effect0
+      - name: intro3
+        parts:
+          - name: backbeat_with_bass_and_effect0
+          - name: hihat
+      - name: intro4
+        parts:
+          - name: backbeat_with_bass_and_effect0
+          - name: hihat
+          - name: percussion
+      - name: intro5
+        parts:
+          - name: backbeat_with_bass_and_effect0
+          - name: hihat
+          - name: percussion
+          - name: effect0
+      - name: main1
+        parts:
+          - name: backbeat_with_bass_and_effect0_break
+          - name: hihat
+          - name: percussion
+          - name: effect0_fade_out
+          - name: effect1_fade_in
+          - name: pad_fade_in
+          - name: lead_fade_in
+      - name: main3
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: hihat
+          - name: percussion
+          - name: bassline
+          - name: effect1
+          - name: pad
+          - name: lead
+      - name: main4
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: hihat
+          - name: percussion
+          - name: bassline
+          - name: effect1
+          - name: pad_fade_out
+          - name: pad_filtered_fade_in
+          - name: lead
+      - name: main6
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: hihat
+          - name: percussion
+          - name: bassline
+          - name: effect1
+          - name: pad_filtered
+          - name: lead
+      - name: outro0
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: hihat
+          - name: bassline
+          - name: effect1
+          - name: pad_filtered
+          - name: lead
+      - name: outro1
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: hihat
+          - name: bassline
+          - name: effect0
+          - name: pad_filtered
+          - name: lead
+      - name: outro2
+        parts:
+          - name: backbeat_with_bass_and_effect0_full
+          - name: bassline
+          - name: effect0
+          - name: pad_filtered
+          - name: lead
+      - name: outro3
+        parts:
+          - name: backbeat_with_bass_full
+          - name: bassline
+          - name: effect0
+          - name: pad_filtered
+          - name: lead
+      - name: outro4
+        parts:
+          - name: backbeat_with_bass_full
+          - name: bassline
+          - name: pad_filtered
+          - name: lead
+      - name: outro5
+        parts:
+          - name: backbeat
+          - name: pad_filtered
+          - name: lead
+      - name: outro6
+        parts:
+          - name: pad_filtered_fade_out
+          - name: lead_fade_out

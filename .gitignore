@@ -56,3 +56,5 @@ MANIFEST
 examples/*/parts
 examples/*/mix
 examples/*/*.wav
+
+tmp

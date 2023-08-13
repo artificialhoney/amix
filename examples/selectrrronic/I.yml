@@ -1,5 +1,6 @@
-name: Selectrrronic
+name: Selectrrronic I
 original_tempo: 140
+bars: 12
 filters:
   - name: fade
     alias: fade_in

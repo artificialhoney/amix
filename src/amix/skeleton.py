@@ -74,6 +74,14 @@ def parse_args(args):
         "-d", "--data", help="Variables set to fill definition", nargs="*"
     )
     parser.add_argument(
+        "-k",
+        "--keep_tempfiles",
+        help="Don't clean up keep temp files",
+        action="store_true",
+        dest="cleanup",
+    )
+    parser.add_argument("-n", "--name", help="Overwrite name in config")
+    parser.add_argument(
         "-y",
         "--yes",
         help="Overwrite output files without asking.",
@@ -185,11 +193,14 @@ def main(args):
         elif len(clips.values()) > 0:
             definition["clips"] = definition["clips"] | clips
 
+        if args.name:
+            definition["name"] = args.name
+
     try:
         with open(os.path.join(os.path.dirname(__file__), "amix.json")) as f:
             schema = json.load(f)
         jsonschema.validate(definition, schema)
-        Amix(definition, args.output, args.yes, args.loglevel).run()
+        Amix(definition, args.output, args.yes, args.loglevel, args.cleanup).run()
         _logger.info("Done amix")
     except jsonschema.exceptions.ValidationError:
         _logger.exception("Error while parsing amix definition file")

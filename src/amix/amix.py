@@ -28,26 +28,35 @@ class Amix:
     Amix itself.
     """
 
-    def __init__(self, definition, output=None, overwrite_output=False, loglevel=None):
+    def __init__(
+        self,
+        definition,
+        output=None,
+        overwrite_output=False,
+        loglevel=None,
+        keep_tempfiles=False,
+    ):
         """
         Creates a Amix instance for a definition.
         """
 
         self.definition = definition
-        self.parts_dir = os.path.join(os.getcwd(), "parts")
-        self.mix_dir = os.path.join(os.getcwd(), "mix")
-        self.tmp_dir = os.path.join(self.mix_dir, "tmp")
+        self.name = self.definition["name"]
         if output == None:
             self.output = os.getcwd()
         else:
             self.output = os.path.realpath(output)
         self.overwrite_output = overwrite_output
+        self.parts_dir = os.path.join(self.output, self.name, "parts")
+        self.mix_dir = os.path.join(self.output, self.name, "mix")
+        self.tmp_dir = os.path.join(self.mix_dir, self.name, "tmp")
         if loglevel == logging.DEBUG:
             self.loglevel = "debug"
         elif loglevel == logging.INFO:
             self.loglevel = "info"
         else:
             self.loglevel = "error"
+        self.keep_tempfiles = keep_tempfiles
 
     def _load_clips(self):
         """
@@ -329,6 +338,7 @@ class Amix:
         Path(self.parts_dir).mkdir(parents=True, exist_ok=True)
         Path(self.mix_dir).mkdir(parents=True, exist_ok=True)
         Path(self.tmp_dir).mkdir(parents=True, exist_ok=True)
+
         self._create_mix_parts(
             self.definition["parts"],
             self.definition["original_tempo"],
@@ -389,7 +399,8 @@ class Amix:
 
     def _cleanup(self):
         _logger.info("Cleaning up")
-        shutil.rmtree(self.tmp_dir, ignore_errors=False)
+        if self.keep_tempfiles == False:
+            shutil.rmtree(self.tmp_dir, ignore_errors=False)
 
     def run(self):
         """

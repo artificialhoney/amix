@@ -7,6 +7,29 @@ Changelog
 
 Feature
 ~~~~~~~
+- Deep merge parts. [Sebastian Krüger]
+- Parts to clips. [Sebastian Krüger]
+- Tempo filter. [Sebastian Krüger]
+
+Changes
+~~~~~~~
+- Cleanup. [Sebastian Krüger]
+- Fixture tests. [Sebastian Krüger]
+- Github action. [Sebastian Krüger]
+- Test action. [Sebastian Krüger]
+- Snapshot testing. [Sebastian Krüger]
+- Styling docs theme. [Sebastian Krüger]
+
+Other
+~~~~~
+- README. [Sebastian Krüger]
+
+
+0.1.3 (2023-08-12)
+------------------
+
+Feature
+~~~~~~~
 - Selectrrronic. [Sebastian Krüger]
 
 Fix
@@ -23,6 +46,7 @@ Changes
 
 Other
 ~~~~~
+- CHANGELOG. [Sebastian Krüger]
 - README. [Sebastian Krüger]
 
 

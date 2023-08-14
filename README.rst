@@ -30,6 +30,12 @@ amix
 .. image:: https://github.com/artificialhoney/amix/actions/workflows/test.yml/badge.svg
    :alt: Test
    :target: https://github.com/artificialhoney/amix/actions/workflows/test.yml
+.. image:: https://img.shields.io/coveralls/github/artificialhoney/amix/main.svg
+    :alt: Coveralls
+    :target: https://coveralls.io/r/artificialhoney/amix
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :alt: License MIT
+    :target: https://opensource.org/licenses/MIT
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
@@ -71,3 +77,30 @@ Check out the `examples` folder. I also uploaded my result to SoundCloud_.
 .. code-block::
 
     cd examples/selectrrronic && amix --parts_from_clips III.yml
+
+-------------
+Configuration
+-------------
+
+You can find the JSON schema here_.
+
+.. _here: https://github.com/artificialhoney/amix/blob/main/src/amix/amix.json
+
+
+A sample configuration looks like:
+
+.. code-block:: yaml
+
+    name: DnB
+    original_tempo: 180
+    parts:
+    backbeat:
+        bars: 16
+        clips:
+        - name: backbeat
+    mixes:
+    main:
+        segments:
+        - name: intro0
+            parts:
+            - name: backbeat

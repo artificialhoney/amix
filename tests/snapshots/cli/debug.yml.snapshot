@@ -1,0 +1,11 @@
+!!python/tuple
+- fixtures/basic.yml
+- null
+- false
+- 10
+- false
+- - clips
+- null
+- []
+- null
+- false

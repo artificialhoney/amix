@@ -45,9 +45,10 @@ def _sha1_checksum(data: (str, bytearray, bytes, io.BufferedReader, io.FileIO)) 
 def test_run(snapshot):
     """Test Amix().run"""
     fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
+    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "amix")
+    snapshot.snapshot_dir = snapshots_dir
     for fixture in fixtures:
         test_name = os.path.splitext(os.path.basename(fixture))[0]
-        snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
 
         Amix.create(
             fixture,
@@ -56,7 +57,6 @@ def test_run(snapshot):
             name=test_name,
         ).run()
 
-        snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(
             _sha1_checksum(
                 os.path.join(os.path.dirname(__file__), "tmp", test_name + ".wav")
@@ -68,11 +68,11 @@ def test_run(snapshot):
 def test_create(snapshot):
     """Test Amix.create"""
     fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
+    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "amix")
+    snapshot.snapshot_dir = snapshots_dir
     for fixture in fixtures:
         test_name = os.path.splitext(os.path.basename(fixture))[0]
-        snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
 
-        snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(
             yaml.dump(
                 Amix.create(

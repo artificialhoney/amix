@@ -1,4 +1,5 @@
 pytest-snapshot
+mock
 
 ffmpeg-python
 jsonschema

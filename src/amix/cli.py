@@ -59,7 +59,7 @@ class CLI:
             "--clip",
             help='Amix input audio clip file or folder ("*.mp3", "*.wav", "*.aif")',
             nargs="*",
-            default=[os.path.join(os.getcwd(), "clips")],
+            default=["clips"],
         )
         parser.add_argument(
             "-a",

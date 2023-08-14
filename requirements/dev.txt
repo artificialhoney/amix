@@ -3,6 +3,7 @@ isort
 black
 gitchangelog
 pytest-snapshot
+mock
 
 ffmpeg-python
 jsonschema

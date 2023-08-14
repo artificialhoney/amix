@@ -3,10 +3,12 @@
 
 .. jsonschema:: ../src/amix/amix.json#/definitions/amix
 
-.. jsonschema:: ../src/amix/amix.json#/definitions/clips
+.. jsonschema:: ../src/amix/amix.json#/definitions/clip
 
-.. jsonschema:: ../src/amix/amix.json#/definitions/filters
+.. jsonschema:: ../src/amix/amix.json#/definitions/filter
 
-.. jsonschema:: ../src/amix/amix.json#/definitions/parts
+.. jsonschema:: ../src/amix/amix.json#/definitions/part
 
-.. jsonschema:: ../src/amix/amix.json#/definitions/mix
+.. jsonschema:: ../src/amix/amix.json#/definitions/segment
+
+.. jsonschema:: ../src/amix/amix.json#/definitions/reference

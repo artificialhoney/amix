@@ -75,11 +75,11 @@ A sample configuration looks like:
     name: DnB
     original_tempo: 180
     parts:
-        backbeat:
-            bars: 16
-            clips:
+      backbeat_part:
+          bars: 16
+          clips:
             - name: backbeat
     mix:
-        - name: intro0
-            parts:
-            - name: backbeat
+      - name: intro
+        parts:
+          - name: backbeat_part

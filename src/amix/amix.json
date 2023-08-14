@@ -38,310 +38,292 @@
           "exclusiveMinimum": 0
         },
         "clips": {
-          "$ref": "#/definitions/clips"
+          "title": "Clips",
+          "type": "array",
+          "description": "List of clips",
+          "items": {
+            "$ref": "#/definitions/clip"
+          },
+          "uniqueItems": true
         },
         "filters": {
-          "$ref": "#/definitions/filters"
+          "title": "Filters",
+          "type": "array",
+          "description": "List of filters",
+          "items": {
+            "$ref": "#/definitions/filter"
+          },
+          "uniqueItems": true
         },
         "parts": {
-          "$ref": "#/definitions/parts"
+          "title": "Parts",
+          "type": "array",
+          "description": "List of parts",
+          "items": {
+            "$ref": "#/definitions/part"
+          },
+          "uniqueItems": true
         },
         "mix": {
-          "$ref": "#/definitions/mix"
+          "title": "Mix",
+          "type": "array",
+          "description": "List of mix segments",
+          "items": {
+            "$ref": "#/definitions/segment"
+          },
+          "uniqueItems": true
         }
       },
       "required": ["mix", "name", "original_tempo"]
     },
-    "clips": {
-      "title": "Clips",
-      "type": "array",
-      "description": "List of clips",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "The name of the clip"
-          },
-          "path": {
-            "title": "Path",
-            "type": "string",
-            "description": "The file path of the clip"
-          }
+    "clip": {
+      "title": "Clip",
+      "type": "object",
+      "description": "A clip representing an audio file",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name of the clip"
         },
-        "required": ["name", "path"]
+        "path": {
+          "title": "Path",
+          "type": "string",
+          "description": "The file path of the clip"
+        }
       },
-      "uniqueItems": true,
-      "$$target": ["#/definitions/clips"]
+      "required": ["name", "path"],
+      "$$target": ["#/definitions/clip"]
     },
-    "filters": {
-      "title": "Filters",
-      "type": "array",
-      "description": "List of filter macros",
-      "items": {
-        "title": "Filter",
-        "type": "object",
-        "description": "",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "The name of the filter"
-          },
-          "type": {
-            "title": "Type",
-            "enum": ["volume", "fade", "pitch", "tempo"],
-            "description": "The type of the filter"
-          },
-          "from": {
-            "title": "From",
-            "type": "number",
-            "description": "Filter effect from in bars",
-            "minimum": 0
-          },
-          "to": {
-            "title": "To",
-            "type": "number",
-            "description": "Filter effect to in bars",
-            "minimum": 0
-          },
-          "start_time": {
-            "title": "Start time",
-            "type": "number",
-            "description": "Start time for fade effect in bars",
-            "minimum": 0
-          },
-          "duration": {
-            "title": "Duration",
-            "type": "number",
-            "description": "Duration for fade effect in bars",
-            "minimum": 0
-          },
-          "direction": {
-            "title": "Direction",
-            "enum": ["in", "out"],
-            "description": "Direction for fade effect"
-          },
-          "curve": {
-            "title": "Curve",
-            "enum": [
-              "tri",
-              "qsin",
-              "hsin",
-              "esin",
-              "log",
-              "ipar",
-              "qua",
-              "cub",
-              "squ",
-              "cbr",
-              "par",
-              "exp",
-              "iqsin",
-              "ihsin",
-              "dese",
-              "desi",
-              "losi",
-              "sinc",
-              "isinc",
-              "nofade"
-            ],
-            "description": "The interploation function to use with the fade filter"
-          },
-          "pitch": {
-            "title": "Pitch",
-            "type": "number",
-            "description": "The factor to adjust the pitch",
-            "exclusiveMinimum": 0
-          },
-          "tempo": {
-            "title": "Tempo",
-            "type": "number",
-            "description": "The factor to adjust the tempo",
-            "exclusiveMinimum": 0
-          },
-          "volume": {
-            "title": "Volume",
-            "type": "number",
-            "description": "The factor to adjust the volume",
-            "minimum": 0
-          }
+    "filter": {
+      "title": "Filter",
+      "type": "object",
+      "description": "A filter to adjust audio",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name of the filter"
         },
-        "required": ["name"]
-      },
-      "uniqueItems": true,
-      "$$target": ["#/definitions/filters"]
-    },
-    "parts": {
-      "title": "Parts",
-      "type": "array",
-      "description": "List of mix parts",
-      "items": {
-        "title": "Part",
-        "type": "object",
-        "description": "Reusable part, which can contain several clips",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "The name of the part"
-          },
-          "bars": {
-            "title": "Bars",
-            "type": "integer",
-            "description": "The bars to fit the part into"
-          },
-          "clips": {
-            "type": "array",
-            "items": {
-              "title": "Clip reference",
-              "type": "object",
-              "description": "A clip reference",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "title": "Name",
-                  "type": "string",
-                  "description": "The name of the original clip"
-                },
-                "weight": {
-                  "title": "Weight",
-                  "type": "number",
-                  "description": "The weight of the clip",
-                  "exclusiveMinimum": 0
-                },
-                "bars": {
-                  "title": "Bars",
-                  "type": "integer",
-                  "description": "The bars to fit the clip into",
-                  "exclusiveMinimum": 0
-                },
-                "loop": {
-                  "title": "Loops",
-                  "type": "integer",
-                  "description": "Number of loops the clip will be repeated",
-                  "exclusiveMinimum": 0
-                },
-                "offset": {
-                  "title": "Offset",
-                  "type": "integer",
-                  "description": "Offset in bars to delay the clip",
-                  "exclusiveMinimum": 0
-                },
-                "pitch": {
-                  "title": "Pitch",
-                  "type": "number",
-                  "description": "The factor to adjust the pitch",
-                  "exclusiveMinimum": 0
-                },
-                "filters": {
-                  "title": "Filters",
-                  "type": "array",
-                  "description": "List of filters",
-                  "items": {
-                    "title": "Filter reference",
-                    "type": "object",
-                    "description": "A filter reference",
-                    "additionalProperties": false,
-                    "properties": {
-                      "name": {
-                        "title": "Name",
-                        "type": "string",
-                        "description": "The name of the filter reference"
-                      }
-                    },
-                    "required": ["name"]
-                  }
-                }
-              },
-              "required": ["name"]
-            }
-          },
-          "filters": {
-            "title": "Filters",
-            "type": "array",
-            "description": "List of filters",
-            "items": {
-              "title": "Filter reference",
-              "type": "object",
-              "description": "A filter reference",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "title": "Name",
-                  "type": "string",
-                  "description": "The name of the filter reference"
-                }
-              },
-              "required": ["name"]
-            }
-          }
+        "type": {
+          "title": "Type",
+          "enum": ["volume", "fade", "pitch", "tempo"],
+          "description": "The type of the filter"
         },
-        "required": ["name", "clips"]
+        "from": {
+          "title": "From",
+          "type": "number",
+          "description": "Filter effect from in bars",
+          "minimum": 0
+        },
+        "to": {
+          "title": "To",
+          "type": "number",
+          "description": "Filter effect to in bars",
+          "minimum": 0
+        },
+        "start_time": {
+          "title": "Start time",
+          "type": "number",
+          "description": "Start time for fade effect in bars",
+          "minimum": 0
+        },
+        "duration": {
+          "title": "Duration",
+          "type": "number",
+          "description": "Duration for fade effect in bars",
+          "minimum": 0
+        },
+        "direction": {
+          "title": "Direction",
+          "enum": ["in", "out"],
+          "description": "Direction for fade effect"
+        },
+        "curve": {
+          "title": "Curve",
+          "enum": [
+            "tri",
+            "qsin",
+            "hsin",
+            "esin",
+            "log",
+            "ipar",
+            "qua",
+            "cub",
+            "squ",
+            "cbr",
+            "par",
+            "exp",
+            "iqsin",
+            "ihsin",
+            "dese",
+            "desi",
+            "losi",
+            "sinc",
+            "isinc",
+            "nofade"
+          ],
+          "description": "The interploation function to use with the fade filter"
+        },
+        "pitch": {
+          "title": "Pitch",
+          "type": "number",
+          "description": "The factor to adjust the pitch",
+          "exclusiveMinimum": 0
+        },
+        "tempo": {
+          "title": "Tempo",
+          "type": "number",
+          "description": "The factor to adjust the tempo",
+          "exclusiveMinimum": 0
+        },
+        "volume": {
+          "title": "Volume",
+          "type": "number",
+          "description": "The factor to adjust the volume",
+          "minimum": 0
+        }
       },
-      "$$target": ["#/definitions/parts"]
+      "required": ["name"],
+      "$$target": ["#/definitions/filter"]
     },
-    "mix": {
-      "title": "Mix",
-      "type": "array",
-      "description": "The main mix definition",
-      "items": {
-        "title": "Segment",
-        "type": "object",
-        "description": "Segments will be concatenated",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "The name of the segment"
-          },
-          "parts": {
-            "type": "array",
-            "items": {
-              "title": "Part reference",
-              "type": "object",
-              "description": "A part reference",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "title": "Name",
-                  "type": "string",
-                  "description": "The name of the part reference"
-                }
+    "part": {
+      "title": "Part",
+      "type": "object",
+      "description": "Reusable part, which can contain several clips",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name of the part"
+        },
+        "bars": {
+          "title": "Bars",
+          "type": "integer",
+          "description": "The bars to fit the part into"
+        },
+        "clips": {
+          "type": "array",
+          "items": {
+            "title": "Clip reference",
+            "type": "object",
+            "description": "A clip reference",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string",
+                "description": "The name of the original clip"
               },
-              "required": ["name"]
+              "weight": {
+                "title": "Weight",
+                "type": "number",
+                "description": "The weight of the clip",
+                "exclusiveMinimum": 0
+              },
+              "bars": {
+                "title": "Bars",
+                "type": "integer",
+                "description": "The bars to fit the clip into",
+                "exclusiveMinimum": 0
+              },
+              "loop": {
+                "title": "Loops",
+                "type": "integer",
+                "description": "Number of loops the clip will be repeated",
+                "exclusiveMinimum": 0
+              },
+              "offset": {
+                "title": "Offset",
+                "type": "integer",
+                "description": "Offset in bars to delay the clip",
+                "exclusiveMinimum": 0
+              },
+              "pitch": {
+                "title": "Pitch",
+                "type": "number",
+                "description": "The factor to adjust the pitch",
+                "exclusiveMinimum": 0
+              },
+              "filters": {
+                "title": "Filters",
+                "type": "array",
+                "description": "List of filters",
+                "items": {
+                  "title": "Filter reference",
+                  "description": "A filter reference",
+                  "$ref": "#/definitions/reference"
+                }
+              }
             },
-            "uniqueItems": true
-          },
-          "filters": {
-            "title": "Filters",
-            "type": "array",
-            "description": "List of filters",
-            "items": {
-              "title": "Filter reference",
-              "type": "object",
-              "description": "A filter reference",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "title": "Name",
-                  "type": "string",
-                  "description": "The name of the filter reference"
-                }
-              },
-              "required": ["name"]
-            }
+            "required": ["name"]
           }
         },
-        "required": ["name"]
+        "filters": {
+          "title": "Filters",
+          "type": "array",
+          "description": "List of filters",
+          "items": {
+            "title": "Filter reference",
+            "description": "A filter reference",
+            "$ref": "#/definitions/reference"
+          }
+        }
       },
-      "uniqueItems": true,
-      "$$target": ["#/definitions/mix"]
+      "required": ["name", "clips"],
+      "$$target": ["#/definitions/part"]
+    },
+    "segment": {
+      "title": "Segment",
+      "type": "object",
+      "description": "Segments will be concatenated",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name of the segment"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "title": "Part reference",
+            "description": "A part reference",
+            "$ref": "#/definitions/reference"
+          },
+          "uniqueItems": true
+        },
+        "filters": {
+          "title": "Filters",
+          "type": "array",
+          "description": "List of filters",
+          "items": {
+            "title": "Filter reference",
+            "description": "A filter reference",
+            "$ref": "#/definitions/reference"
+          }
+        }
+      },
+      "required": ["name"],
+      "$$target": ["#/definitions/segment"]
+    },
+    "reference": {
+      "title": "Reference",
+      "type": "object",
+      "description": "A reference",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name of the original instance"
+        }
+      },
+      "required": ["name"],
+      "$$target": ["#/definitions/reference"]
     }
   }
 }

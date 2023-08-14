@@ -2,6 +2,26 @@ Changelog
 =========
 
 
+0.1.5 (2023-08-14)
+------------------
+
+Feature
+~~~~~~~
+- Parts and segments filtering. [Sebastian Krüger]
+
+Changes
+~~~~~~~
+- Readme and coverage report. [Sebastian Krüger]
+- Pygments theme. [Sebastian Krüger]
+- More tests. [Sebastian Krüger]
+- Docs styling. [Sebastian Krüger]
+
+Other
+~~~~~
+- CHANGELOG. [Sebastian Krüger]
+- README. [Sebastian Krüger]
+
+
 0.1.4 (2023-08-13)
 ------------------
 

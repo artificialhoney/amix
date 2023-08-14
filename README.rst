@@ -29,7 +29,7 @@ Installation
 
 Make sure, to have **ffmpeg** installed.
 
-.. code-block::
+.. code-block:: bash
 
     pip install amix
 
@@ -43,19 +43,19 @@ I also uploaded my first results to SoundCloud_.
 .. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
 
 
-.. code-block::
+.. code-block:: bash
 
     amix
 
-.. code-block::
+.. code-block:: bash
 
     amix -vv
 
-.. code-block::
+.. code-block:: bash
 
     amix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"
 
-.. code-block::
+.. code-block:: bash
 
     amix --parts_from_clips III.yml
 

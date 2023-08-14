@@ -57,26 +57,26 @@ Make sure, to have **ffmpeg** installed.
 Usage
 -----
 
-Check out the `examples` folder. I also uploaded my result to SoundCloud_.
+I also uploaded my first results to SoundCloud_.
 
 .. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
 
 
 .. code-block::
 
-    cd examples/mannheim && amix
+    amix
 
 .. code-block::
 
-    cd examples/milano && amix -vv
+    amix -vv
 
 .. code-block::
 
-    cd examples/heidelberg && amix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"
+    amix --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"
 
 .. code-block::
 
-    cd examples/selectrrronic && amix --parts_from_clips III.yml
+    amix --parts_from_clips III.yml
 
 -------------
 Configuration
@@ -98,9 +98,7 @@ A sample configuration looks like:
         bars: 16
         clips:
         - name: backbeat
-    mixes:
-    main:
-        segments:
+    mix:
         - name: intro0
             parts:
             - name: backbeat

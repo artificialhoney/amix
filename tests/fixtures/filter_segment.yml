@@ -1,0 +1,23 @@
+name: FiltersSegment
+original_tempo: 180
+filters:
+  - name: fade_in
+    type: fade
+    curve: esin
+    direction: in
+parts:
+  - name: backbeat
+    bars: 16
+    clips:
+      - name: backbeat
+  - name: bass
+    bars: 16
+    clips:
+      - name: bass
+mix:
+  - name: intro0
+    parts:
+      - name: backbeat
+      - name: bass
+    filters:
+      - name: fade_in

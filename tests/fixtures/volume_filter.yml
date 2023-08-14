@@ -1,0 +1,19 @@
+name: Volume Filter
+original_tempo: 180
+filters:
+  - name: volume_cut
+    type: volume
+    volume: 0
+    from: 15.75
+    to: 16
+parts:
+  - name: backbeat
+    bars: 16
+    clips:
+      - name: backbeat
+        filters:
+          - name: volume_cut
+mix:
+  - name: intro0
+    parts:
+      - name: backbeat

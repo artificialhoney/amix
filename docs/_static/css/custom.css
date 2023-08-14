@@ -7,3 +7,7 @@ body {
 a {
     text-decoration: none;
 }
+
+table.docutils.align-default {
+    min-width: 100%;
+}

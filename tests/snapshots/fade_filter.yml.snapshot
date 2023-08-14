@@ -3,16 +3,23 @@ clips:
   path: tests/fixtures/clips/backbeat.wav
 - name: bass
   path: tests/fixtures/clips/bass.wav
+filters:
+- curve: esin
+  direction: in
+  name: fade_in
+  type: fade
 mix:
 - name: intro0
   parts:
   - name: backbeat
-name: Basic
+name: Fade Filter
 original_tempo: 180
 parts:
 - bars: 16
   clips:
-  - name: backbeat
+  - filters:
+    - name: fade_in
+    name: backbeat
   name: backbeat
 - clips:
   - name: backbeat

@@ -59,11 +59,9 @@ def test_run(snapshot):
         snapshot.snapshot_dir = snapshots_dir
         snapshot.assert_match(
             _sha1_checksum(
-                os.path.join(
-                    os.path.dirname(__file__), "tmp", test_name + " (main).wav"
-                )
+                os.path.join(os.path.dirname(__file__), "tmp", test_name + ".wav")
             ),
-            os.path.join(snapshots_dir, test_name + ".wav") + ".snapshot",
+            os.path.join(snapshots_dir, test_name + ".wav.snapshot"),
         )
 
 
@@ -84,5 +82,5 @@ def test_create(snapshot):
                     parts_from_clips=True,
                 ).definition
             ),
-            os.path.join(snapshots_dir, test_name + ".yml") + ".snapshot",
+            os.path.join(snapshots_dir, test_name + ".yml.snapshot"),
         )

@@ -15,7 +15,7 @@ parts:
     clips:
       - name: bass
 mix:
-  - name: intro0
+  - name: segment
     parts:
       - name: backbeat
       - name: bass

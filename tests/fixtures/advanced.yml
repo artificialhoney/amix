@@ -21,7 +21,7 @@ parts:
         bars: 2
         offset: 4
 mix:
-  - name: intro0
+  - name: segment
     parts:
       - name: backbeat
       - name: bass

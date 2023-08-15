@@ -14,5 +14,3 @@ parts:
   - bars: 8
     name: backbeat
   name: backbeat
-pitch: 0.9
-tempo: 1.2

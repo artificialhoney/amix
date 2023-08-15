@@ -13,6 +13,6 @@ parts:
         filters:
           - name: fade_in
 mix:
-  - name: intro0
+  - name: segment
     parts:
       - name: backbeat

@@ -25,18 +25,6 @@
           "description": "The number of bars to quantize to, like e.g. 16",
           "exclusiveMinimum": 0
         },
-        "pitch": {
-          "title": "Pitch",
-          "type": "number",
-          "description": "The factor to adjust the pitch",
-          "exclusiveMinimum": 0
-        },
-        "tempo": {
-          "title": "Tempo",
-          "type": "number",
-          "description": "The factor to adjust the tempo",
-          "exclusiveMinimum": 0
-        },
         "clips": {
           "title": "Clips",
           "type": "array",
@@ -109,7 +97,7 @@
         },
         "type": {
           "title": "Type",
-          "enum": ["volume", "fade", "pitch", "tempo"],
+          "enum": ["volume", "fade", "pitch"],
           "description": "The type of the filter"
         },
         "from": {
@@ -179,6 +167,46 @@
           "description": "The factor to adjust the tempo",
           "exclusiveMinimum": 0
         },
+        "transients": {
+          "title": "Transients",
+          "enum": ["crisp", "mixed", "smooth"],
+          "description": "Transients regarding the pitch filter"
+        },
+        "detector": {
+          "title": "Detector",
+          "enum": ["compound", "percussive", "soft"],
+          "description": "Detector regarding the pitch filter"
+        },
+        "phase": {
+          "title": "Phase",
+          "enum": ["laminar", "independent"],
+          "description": "Phase regarding the pitch filter"
+        },
+        "window": {
+          "title": "Window",
+          "enum": ["standard", "short", "long"],
+          "description": "Window regarding the pitch filter"
+        },
+        "smoothing": {
+          "title": "Smoothing",
+          "enum": ["on", "off"],
+          "description": "Smoothing regarding the pitch filter"
+        },
+        "formant": {
+          "title": "Formant",
+          "enum": ["shifted", "preserved"],
+          "description": "Formant regarding the pitch filter"
+        },
+        "pitchq": {
+          "title": "Pitch quality",
+          "enum": ["quality", "speed", "consistency"],
+          "description": "Pitch quality regarding the pitch filter"
+        },
+        "channels": {
+          "title": "Channels",
+          "enum": ["apart", "together"],
+          "description": "Channels regarding the pitch filter"
+        },
         "volume": {
           "title": "Volume",
           "type": "number",
@@ -240,12 +268,6 @@
                 "title": "Offset",
                 "type": "integer",
                 "description": "Offset in bars to delay the clip",
-                "exclusiveMinimum": 0
-              },
-              "pitch": {
-                "title": "Pitch",
-                "type": "number",
-                "description": "The factor to adjust the pitch",
                 "exclusiveMinimum": 0
               },
               "filters": {

@@ -2,7 +2,7 @@ clips:
 - name: bass
   path: tests/fixtures/clips/bass.wav
 mix:
-- name: intro0
+- name: segment
   parts:
   - name: backbeat
 name: Basic

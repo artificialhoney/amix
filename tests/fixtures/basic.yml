@@ -6,6 +6,6 @@ parts:
     clips:
       - name: backbeat
 mix:
-  - name: intro0
+  - name: segment
     parts:
       - name: backbeat

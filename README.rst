@@ -42,13 +42,13 @@ I also uploaded my first results to SoundCloud_.
 
 .. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
 
-Please check first of all the help function:
+Please check first of all the help function.
 
 .. code-block:: bash
 
     amix --help
 
-Also make sure to always obtain the latest version:
+Also make sure to always obtain the latest version.
 
 .. code-block:: bash
 

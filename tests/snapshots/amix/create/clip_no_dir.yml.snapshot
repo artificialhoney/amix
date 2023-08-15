@@ -1,6 +1,6 @@
 clips: []
 mix:
-- name: intro0
+- name: segment
   parts:
   - name: backbeat
 name: Basic

@@ -199,12 +199,16 @@ class Amix:
         elif filter_type == "volume":
             kwargs["volume"] = float(filter["volume"])
         elif filter_type == "pitch":
-            kwargs["tempo"] = 1.0
-            kwargs["pitch"] = float(filter["pitch"])
-            filter_type = "rubberband"
-        elif filter_type == "tempo":
-            kwargs["tempo"] = float(filter["tempo"])
-            kwargs["pitch"] = 1.0
+            kwargs["tempo"] = float(filter.get("tempo", 1))
+            kwargs["pitch"] = float(filter.get("pitch", 1))
+            kwargs["transients"] = filter.get("transients", "crisp")
+            kwargs["detector"] = filter.get("detector", "compound")
+            kwargs["phase"] = filter.get("phase", "laminar")
+            kwargs["window"] = filter.get("window", "standard")
+            kwargs["smoothing"] = filter.get("smoothing", "off")
+            kwargs["formant"] = filter.get("formant", "shifted")
+            kwargs["pitchq"] = filter.get("pitchq", "quality")
+            kwargs["channels"] = filter.get("channels", "apart")
             filter_type = "rubberband"
 
         return filter_type, kwargs
@@ -387,10 +391,6 @@ class Amix:
             )
             mix.append(ffmpeg.input(filename))
         self.mix = ffmpeg.filter(mix, "concat", n=len(mix), v=0, a=1)
-        tempo = float(self.definition.get("tempo", 1))
-        pitch = float(self.definition.get("pitch", 1))
-        if tempo != 1 or pitch != 1:
-            self.mix = ffmpeg.filter(self.mix, "rubberband", tempo=tempo, pitch=pitch)
 
     def _render_mix(self):
         """

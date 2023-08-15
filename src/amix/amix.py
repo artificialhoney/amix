@@ -206,8 +206,6 @@ class Amix:
             kwargs["tempo"] = float(filter["tempo"])
             kwargs["pitch"] = 1.0
             filter_type = "rubberband"
-        else:
-            raise Exception('Filter not found "{0}"'.format(filter_type))
 
         return filter_type, kwargs
 
@@ -220,8 +218,6 @@ class Amix:
         _logger.info('Creating mix part "{0}"'.format(name))
         clips = []
         for definition in part["clips"]:
-            if not definition["name"] in self.clips:
-                continue
             c = self.clips[definition["name"]]
             bars_original = math.ceil(float(c.probe["duration"]) / self.bar_time)
             bars_part = definition.get("bars", part.get("bars", bars_global))

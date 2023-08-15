@@ -1,0 +1,27 @@
+name: Advanced
+original_tempo: 180
+bars: 16
+filters:
+  - name: volume_cut
+    type: volume
+    volume: 0
+    from: 15.75
+parts:
+  - name: backbeat
+    clips:
+      - name: backbeat
+        bars: 8
+        offset: 4
+        loop: 4
+        filters:
+          - name: volume_cut
+  - name: bass
+    clips:
+      - name: bass
+        bars: 2
+        offset: 4
+mix:
+  - name: intro0
+    parts:
+      - name: backbeat
+      - name: bass

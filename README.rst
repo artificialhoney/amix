@@ -5,7 +5,7 @@ amix
 .. image:: https://img.shields.io/pypi/v/amix.svg
     :alt: PyPI-Server
     :target: https://pypi.org/project/amix/
-.. image:: https://pepy.tech/badge/amix/month
+.. image:: https://static.pepy.tech/badge/amix/month
     :alt: Monthly Downloads
     :target: https://pepy.tech/project/amix
 .. image:: https://github.com/artificialhoney/amix/actions/workflows/test.yml/badge.svg

@@ -1,11 +1,11 @@
 import glob
 import hashlib
 import io
-import logging
 import os
 
 import pytest
 import yaml
+from jsonschema import ValidationError
 
 from amix.amix import Amix
 
@@ -45,7 +45,7 @@ def _sha1_checksum(data: (str, bytearray, bytes, io.BufferedReader, io.FileIO)) 
 def test_run(snapshot):
     """Test Amix().run"""
     fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
-    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "amix")
+    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "amix", "run")
     snapshot.snapshot_dir = snapshots_dir
     for fixture in fixtures:
         test_name = os.path.splitext(os.path.basename(fixture))[0]
@@ -67,20 +67,84 @@ def test_run(snapshot):
 
 def test_create(snapshot):
     """Test Amix.create"""
-    fixtures = glob.glob(os.path.join(os.path.dirname(__file__), "fixtures", "*.yml"))
-    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "amix")
+    definition = os.path.join(os.path.dirname(__file__), "fixtures", "basic.yml")
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    fixtures = [
+        ("basic", {}),
+        ("yes", {"yes": True}),
+        ("cleanup", {"cleanup": False}),
+        ("parts_from_clips", {"parts_from_clips": True}),
+        ("clip_empty", {"clip": [], "alias": []}),
+        (
+            "clip_dir",
+            {"clip": [os.path.join(os.path.dirname(__file__), "fixtures", "clips")]},
+        ),
+        (
+            "clip_file",
+            {
+                "clip": [
+                    os.path.join(
+                        os.path.dirname(__file__), "fixtures", "clips", "bass.wav"
+                    )
+                ]
+            },
+        ),
+        (
+            "clip_no_dir",
+            {"clip": [os.path.join(os.path.dirname(__file__), "fixtures", "test")]},
+        ),
+        (
+            "clip_no_file",
+            {
+                "clip": [
+                    os.path.join(
+                        os.path.dirname(__file__), "fixtures", "clips", "test.wav"
+                    )
+                ]
+            },
+        ),
+    ]
+    snapshots_dir = os.path.join(
+        os.path.dirname(__file__), "snapshots", "amix", "create"
+    )
     snapshot.snapshot_dir = snapshots_dir
-    for fixture in fixtures:
-        test_name = os.path.splitext(os.path.basename(fixture))[0]
-
+    for test_name, fixture in fixtures:
         snapshot.assert_match(
-            yaml.dump(
-                Amix.create(
-                    fixture,
-                    os.path.join(os.path.dirname(__file__), "tmp"),
-                    True,
-                    parts_from_clips=True,
-                ).definition
-            ),
+            yaml.dump(Amix.create(definition, output, **fixture).definition),
             os.path.join(snapshots_dir, test_name + ".yml.snapshot"),
+        )
+
+
+def test_create_with_template(snapshot):
+    definition = os.path.join(
+        os.path.dirname(__file__), "fixtures", "templates", "data.yml.j2"
+    )
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    fixtures = [
+        ("basic", {"data": ["tempo=1.2", "pitch=0.9", "bars=8"]}),
+    ]
+    snapshots_dir = os.path.join(
+        os.path.dirname(__file__), "snapshots", "amix", "create_with_template"
+    )
+    snapshot.snapshot_dir = snapshots_dir
+    for test_name, fixture in fixtures:
+        snapshot.assert_match(
+            yaml.dump(Amix.create(definition, output, **fixture).definition),
+            os.path.join(snapshots_dir, test_name + ".yml.snapshot"),
+        )
+
+
+def test_create_with_validation_error(snapshot):
+    definition = os.path.join(
+        os.path.dirname(__file__), "fixtures", "templates", "data.yml.j2"
+    )
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    with pytest.raises(ValidationError):
+        Amix.create(
+            definition,
+            output,
+            **{
+                "clip": [os.path.join(os.path.dirname(__file__), "fixtures", "clips")],
+                "data": ["tempo=1.2", "pitch=0.9", "bars='8'"],
+            }
         )

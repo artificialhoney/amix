@@ -1,11 +1,12 @@
 import os
+import sys
 from unittest.mock import MagicMock
 
 import pytest
 import yaml
 
 from amix.amix import Amix
-from amix.cli import CLI
+from amix.cli import run
 
 __author__ = "Sebastian Krüger"
 __copyright__ = "Sebastian Krüger"
@@ -16,11 +17,12 @@ def test_run(snapshot):
     """Test CLI().run"""
     snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "cli")
     snapshot.snapshot_dir = snapshots_dir
-
+    basic_fixture_path = os.path.join("fixtures", "basic.yml")
     fixtures = [("basic", []), ("debug", ["-vv"])]
     for test_name, fixture in fixtures:
         Amix.create = MagicMock()
-        CLI().run([os.path.join("fixtures", "basic.yml")] + fixture)
+        sys.argv = ["test", basic_fixture_path] + fixture
+        run()
 
         snapshot.assert_match(
             yaml.dump(Amix.create.call_args.args),

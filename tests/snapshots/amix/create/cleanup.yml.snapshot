@@ -3,28 +3,14 @@ clips:
   path: tests/fixtures/clips/backbeat.wav
 - name: bass
   path: tests/fixtures/clips/bass.wav
-filters:
-- from: 15.75
-  name: volume_cut
-  to: 16
-  type: volume
-  volume: 0
 mix:
 - name: intro0
   parts:
   - name: backbeat
-name: Volume Filter
+name: Basic
 original_tempo: 180
 parts:
 - bars: 16
   clips:
-  - filters:
-    - name: volume_cut
-    name: backbeat
-  name: backbeat
-- clips:
   - name: backbeat
   name: backbeat
-- clips:
-  - name: bass
-  name: bass

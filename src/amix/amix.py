@@ -45,53 +45,21 @@ class Amix:
         name=None,
         parts_from_clips=False,
     ):
-        if not clip:
+        if clip == None:
             clip = [os.path.dirname(config) + "/clips"]
-        if not alias:
+        if alias == None:
             alias = []
         with open(config) as f:
-            definition = yaml.safe_load(f)
-        if data != None:
-            new_data = {}
-            for d in data:
-                split = d.split("=")
-                key = split[0]
-                val = split[1]
-                new_data[key] = val
-
-            if "original_tempo" in definition:
-                template = Template(definition["original_tempo"])
-                definition["original_tempo"] = float(template.render(new_data))
-
-            if "bars" in definition:
-                template = Template(definition["bars"])
-                definition["bars"] = float(template.render(new_data))
-
-            if "tempo" in definition:
-                template = Template(definition["tempo"])
-                definition["tempo"] = float(template.render(new_data))
-
-            if "pitch" in definition:
-                template = Template(definition["pitch"])
-                definition["pitch"] = float(template.render(new_data))
-
-            if "parts" in definition:
-                for part in definition["parts"].values():
-                    if "bars" in part:
-                        template = Template(part["bars"])
-                        part["bars"] = float(template.render(new_data))
-
-                    for clip in part["clips"]:
-                        if "bars" in clip:
-                            template = Template(clip["bars"])
-                            clip["bars"] = float(template.render(new_data))
-
-            if "filters" in definition:
-                for filter in definition["filters"]:
-                    for field in ["duration", "from", "to"]:
-                        if field in filter:
-                            template = Template(filter[field])
-                            filter[field] = float(template.render(new_data))
+            if data != None:
+                new_data = {}
+                for d in data:
+                    split = d.split("=")
+                    key = split[0]
+                    val = split[1]
+                    new_data[key] = val
+                definition = yaml.safe_load(Template(f.read()).render(new_data))
+            else:
+                definition = yaml.safe_load(f)
 
         clips = []
         types = ("*.mp3", "*.wav", "*.aif")
@@ -109,15 +77,14 @@ class Amix:
                             )
                         )
                     for f in files_grabbed:
-                        if os.path.isfile(f):
-                            path = f
-                            title = (
-                                os.path.splitext(os.path.basename(f))[0]
-                                if index not in alias
-                                else alias[index]
-                            )
-                            index += 1
-                            clips.append({"name": title, "path": path})
+                        path = f
+                        title = (
+                            os.path.splitext(os.path.basename(f))[0]
+                            if index not in alias
+                            else alias[index]
+                        )
+                        index += 1
+                        clips.append({"name": title, "path": path})
                 elif os.path.isfile(file):
                     path = file
                     title = (

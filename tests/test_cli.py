@@ -18,10 +18,12 @@ def test_run(snapshot):
     snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots", "cli")
     snapshot.snapshot_dir = snapshots_dir
     basic_fixture_path = os.path.join("fixtures", "basic.yml")
+    output = "tmp"
+
     fixtures = [("basic", []), ("debug", ["-vv"])]
     for test_name, fixture in fixtures:
         Amix.create = MagicMock()
-        sys.argv = ["test", basic_fixture_path] + fixture
+        sys.argv = ["test", basic_fixture_path, "-o", output] + fixture
         run()
 
         snapshot.assert_match(

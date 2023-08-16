@@ -38,7 +38,7 @@ class Amix:
         output,
         yes=False,
         loglevel=logging.CRITICAL,
-        cleanup=True,
+        keep_tempfiles=False,
         clip=None,
         data=None,
         alias=None,
@@ -118,7 +118,7 @@ class Amix:
             with open(os.path.join(os.path.dirname(__file__), "amix.json")) as f:
                 schema = json.load(f)
             jsonschema.validate(definition, schema)
-            return Amix(definition, output, yes, loglevel, cleanup)
+            return Amix(definition, output, yes, loglevel, keep_tempfiles)
         except jsonschema.exceptions.ValidationError as e:
             _logger.exception("Error while parsing amix definition file")
             raise e
@@ -126,7 +126,7 @@ class Amix:
     def __init__(
         self,
         definition,
-        output=None,
+        output,
         overwrite_output=False,
         loglevel=None,
         keep_tempfiles=False,
@@ -138,10 +138,7 @@ class Amix:
         self.definition = definition
         self.name = self.definition["name"]
         self.bar_time = (60 / self.definition["original_tempo"]) * 4
-        if output == None:
-            self.output = os.getcwd()
-        else:
-            self.output = os.path.realpath(output)
+        self.output = output
         self.overwrite_output = overwrite_output
         self.parts_dir = os.path.join(self.output, self.name, "parts")
         self.mix_dir = os.path.join(self.output, self.name, "mix")
@@ -210,8 +207,26 @@ class Amix:
             kwargs["pitchq"] = filter.get("pitchq", "quality")
             kwargs["channels"] = filter.get("channels", "apart")
             filter_type = "rubberband"
+        else:
+            raise Exception('Filter "{0}" does not exist'.format(filter_type))
 
         return filter_type, kwargs
+
+    def _apply_filters(self, clip, list):
+        """
+        Applys filters to a clip.
+        """
+        for filter in list:
+            filter_type, kwargs = self._parse_filter(
+                [x for x in self.definition["filters"] if x["name"] == filter["name"]][
+                    0
+                ],
+                self.bar_time,
+            )
+            clip = ffmpeg.filter(
+                clip, filter_type, **{k: v for k, v in kwargs.items() if v is not None}
+            )
+        return clip
 
     def _create_mix_part(self, part, bars_global=None):
         """
@@ -228,7 +243,7 @@ class Amix:
             diff = bars_part - bars_original
             if diff >= 0:
                 bars = bars_original
-                while bars > bars_original and bars > 1 or (bars_part % bars) != 0:
+                while bars == bars_original and bars > 1 or (bars_part % bars) != 0:
                     bars = bars - 1
 
             else:
@@ -258,20 +273,7 @@ class Amix:
             clip = ffmpeg.filter(clip, "aloop", loop=loop, size=sample_rate * clip_time)
 
             if "filters" in definition:
-                for filter in definition["filters"]:
-                    filter_type, kwargs = self._parse_filter(
-                        [
-                            x
-                            for x in self.definition["filters"]
-                            if x["name"] == filter["name"]
-                        ][0],
-                        self.bar_time,
-                    )
-                    clip = ffmpeg.filter(
-                        clip,
-                        filter_type,
-                        **{k: v for k, v in kwargs.items() if v is not None}
-                    )
+                clip = self._apply_filters(clip, definition["filters"])
 
             clips.append({"definition": definition, "clip": clip})
 
@@ -300,20 +302,7 @@ class Amix:
         )
 
         if "filters" in part:
-            for filter in part["filters"]:
-                filter_type, kwargs = self._parse_filter(
-                    [
-                        x
-                        for x in self.definition["filters"]
-                        if x["name"] == filter["name"]
-                    ][0],
-                    self.bar_time,
-                )
-                clip = ffmpeg.filter(
-                    clip,
-                    filter_type,
-                    **{k: v for k, v in kwargs.items() if v is not None}
-                )
+            clip = self._apply_filters(clip, part["filters"])
 
         clip.output(filename, loglevel=self.loglevel).run(
             overwrite_output=self.overwrite_output
@@ -371,20 +360,7 @@ class Amix:
             )
 
             if "filters" in track:
-                for filter in track["filters"]:
-                    filter_type, kwargs = self._parse_filter(
-                        [
-                            x
-                            for x in self.definition["filters"]
-                            if x["name"] == filter["name"]
-                        ][0],
-                        self.bar_time,
-                    )
-                    clip = ffmpeg.filter(
-                        clip,
-                        filter_type,
-                        **{k: v for k, v in kwargs.items() if v is not None}
-                    )
+                clip = self._apply_filters(clip, track["filters"])
 
             clip.output(filename, loglevel=self.loglevel).run(
                 overwrite_output=self.overwrite_output

@@ -1,31 +1,50 @@
 name: Advanced
 original_tempo: 180
-bars: 16
 filters:
+  - name: pitch_down
+    type: pitch
+    pitch: 0.9
   - name: volume_cut
     type: volume
     volume: 0
     from: 15.75
-  - name: pitch_down
-    type: pitch
-    pitch: 0.9
 parts:
-  - name: backbeat
+  - name: backbeat0
     clips:
       - name: backbeat
-        bars: 8
-        offset: 4
-        loop: 4
+        loop: 2
     filters:
-      - name: volume_cut
       - name: pitch_down
-  - name: bass
+  - name: bass0
     clips:
       - name: bass
-        bars: 2
-        offset: 4
-mix:
-  - name: segment
-    parts:
+        offset: 16
+  - name: backbeat1
+    bars: 16
+    clips:
       - name: backbeat
+        loop: 2
+    filters:
+      - name: pitch_down
+      - name: volume_cut
+  - name: bass1
+    clips:
       - name: bass
+        bars: 8
+        loop: 2
+  - name: backbeat2
+    bars: 8
+    clips:
+      - name: bass
+mix:
+  - name: segment0
+    parts:
+      - name: backbeat0
+      - name: bass0
+  - name: segment1
+    parts:
+      - name: backbeat1
+      - name: bass1
+  - name: segment2
+    parts:
+      - name: backbeat2

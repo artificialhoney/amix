@@ -1,6 +1,7 @@
 import glob
 import hashlib
 import io
+import logging
 import os
 
 import pytest
@@ -65,14 +66,39 @@ def test_run(snapshot):
         )
 
 
+def test_run_cleanup():
+    """Test Amix().run cleanup"""
+    fixture = os.path.join(os.path.dirname(__file__), "fixtures", "basic.yml")
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    test_name = "cleanup"
+    tmp_dir = os.path.join(output, test_name, "tmp")
+
+    Amix.create(fixture, output, True, name=test_name, keep_tempfiles=False).run()
+    assert os.path.exists(tmp_dir) == False
+
+    Amix.create(fixture, output, True, name=test_name, keep_tempfiles=True).run()
+    assert os.path.exists(tmp_dir) == True
+
+
+def test_run_wrong_filter():
+    """Test Amix().run wrong filter"""
+    fixture = os.path.join(os.path.dirname(__file__), "fixtures", "fade_filter.yml")
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    test_name = "wrong_filter"
+
+    a = Amix.create(fixture, output, True, name=test_name)
+    a.definition["filters"][0]["type"] = test_name
+
+    with pytest.raises(Exception):
+        a.run()
+
+
 def test_create(snapshot):
     """Test Amix.create"""
     definition = os.path.join(os.path.dirname(__file__), "fixtures", "basic.yml")
     output = os.path.join(os.path.dirname(__file__), "tmp")
     fixtures = [
         ("basic", {}),
-        ("yes", {"yes": True}),
-        ("cleanup", {"cleanup": False}),
         ("parts_from_clips", {"parts_from_clips": True}),
         ("clip_empty", {"clip": [], "alias": []}),
         (
@@ -132,6 +158,19 @@ def test_create_with_template(snapshot):
             yaml.dump(Amix.create(definition, output, **fixture).definition),
             os.path.join(snapshots_dir, test_name + ".yml.snapshot"),
         )
+
+
+def test_create_with_loglevel():
+    fixture = os.path.join(os.path.dirname(__file__), "fixtures", "basic.yml")
+    output = os.path.join(os.path.dirname(__file__), "tmp")
+    a = Amix.create(fixture, output, True)
+    assert a.loglevel == "error"
+
+    a = Amix.create(fixture, output, True, loglevel=logging.DEBUG)
+    assert a.loglevel == "debug"
+
+    a = Amix.create(fixture, output, True, loglevel=logging.INFO)
+    assert a.loglevel == "info"
 
 
 def test_create_with_validation_error(snapshot):

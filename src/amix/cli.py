@@ -68,7 +68,9 @@ class CLI:
             nargs="*",
             default=[],
         )
-        parser.add_argument("-o", "--output", help="Amix output audio file")
+        parser.add_argument(
+            "-o", "--output", help="Amix output audio file", default=os.getcwd()
+        )
         parser.add_argument(
             "-d", "--data", help="Variables set to fill definition", nargs="*"
         )
@@ -77,7 +79,6 @@ class CLI:
             "--keep_tempfiles",
             help="Don't clean up keep temp files",
             action="store_true",
-            dest="cleanup",
         )
         parser.add_argument("-n", "--name", help="Overwrite name in config")
         parser.add_argument(
@@ -123,7 +124,7 @@ class CLI:
             args.output,
             args.yes,
             args.loglevel,
-            args.cleanup,
+            args.keep_tempfiles,
             args.clip,
             args.data,
             args.alias,

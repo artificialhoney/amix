@@ -1,6 +1,6 @@
 !!python/tuple
 - fixtures/basic.yml
-- null
+- tmp
 - false
 - null
 - false

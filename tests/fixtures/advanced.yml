@@ -6,6 +6,9 @@ filters:
     type: volume
     volume: 0
     from: 15.75
+  - name: pitch_down
+    type: pitch
+    pitch: 0.9
 parts:
   - name: backbeat
     clips:
@@ -15,6 +18,7 @@ parts:
         loop: 4
         filters:
           - name: volume_cut
+          - name: pitch_down
   - name: bass
     clips:
       - name: bass

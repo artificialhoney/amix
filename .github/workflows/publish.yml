@@ -11,9 +11,12 @@ jobs:
       name: publish
     runs-on: ubuntu-latest
     steps:
+      - name: Install ffmpeg
+        run: |
+          wget -O ffmpeg.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2022-08-31-12-39/ffmpeg-n5.1-27-g6f53f0d09e-linux64-gpl-5.1.tar.xz
+          tar -xf ffmpeg.tar.xz
+          sudo cp -rf ffmpeg-n5.1-27-g6f53f0d09e-linux64-gpl-5.1/* /usr
       - uses: actions/checkout@v3
-      - uses: FedericoCarboni/setup-ffmpeg@v2
-        id: setup-ffmpeg
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

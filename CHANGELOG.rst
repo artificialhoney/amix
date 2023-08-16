@@ -2,6 +2,34 @@ Changelog
 =========
 
 
+0.1.6 (2023-08-16)
+------------------
+
+Fix
+~~~
+- Some minor issues and more tests. [Sebastian Krüger]
+
+Changes
+~~~~~~~
+- Coverage. [Sebastian Krüger]
+- Pitch test. [Sebastian Krüger]
+- Testing pitch and tempo again. [Sebastian Krüger]
+- Testing loop with offset. [Sebastian Krüger]
+- Fully test Amix.create. [Sebastian Krüger]
+- Publish workflow. [Sebastian Krüger]
+- Use mock. [Sebastian Krüger]
+- Rename skeleton. [Sebastian Krüger]
+- Add lint task. [Sebastian Krüger]
+
+Other
+~~~~~
+- README. [Sebastian Krüger]
+- README. [Sebastian Krüger]
+- README. [Sebastian Krüger]
+- README. [Sebastian Krüger]
+- README. [Sebastian Krüger]
+
+
 0.1.5 (2023-08-14)
 ------------------
 

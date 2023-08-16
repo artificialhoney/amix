@@ -16,9 +16,9 @@ parts:
         bars: 8
         offset: 4
         loop: 4
-        filters:
-          - name: volume_cut
-          - name: pitch_down
+    filters:
+      - name: volume_cut
+      - name: pitch_down
   - name: bass
     clips:
       - name: bass

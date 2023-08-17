@@ -1,6 +1,0 @@
-ffmpeg-python
-jsonschema
-jinja2
-pyaml
-
--e .

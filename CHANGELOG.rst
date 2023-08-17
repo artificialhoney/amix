@@ -2,6 +2,21 @@ Changelog
 =========
 
 
+0.1.7 (2023-08-17)
+------------------
+
+Fix
+~~~
+- Runtime dependencies. [Sebastian Krüger]
+
+Changes
+~~~~~~~
+- Improve workflows. [Sebastian Krüger]
+- Furo theme update. [Sebastian Krüger]
+- Cleanup. [Sebastian Krüger]
+- Gitignore cleanup. [Sebastian Krüger]
+
+
 0.1.6 (2023-08-16)
 ------------------
 
@@ -23,6 +38,7 @@ Changes
 
 Other
 ~~~~~
+- CHANGELOG. [Sebastian Krüger]
 - README. [Sebastian Krüger]
 - README. [Sebastian Krüger]
 - README. [Sebastian Krüger]

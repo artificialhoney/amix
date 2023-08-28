@@ -1,6 +1,6 @@
-=======
+====
 amix
-=======
+====
 
 This is the documentation of **amix**.
 
@@ -12,6 +12,7 @@ Contents
    :maxdepth: 2
 
    Overview <readme>
+   Configuration <configuration>
    Contributions & Help <contributing>
    License <license>
    Authors <authors>

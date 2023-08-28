@@ -23,6 +23,8 @@ amix
 
 Automatic mix of audio clips.
 
+Read more: `https://artificialhoney.github.io/amix <https://artificialhoney.github.io/amix>`_
+
 ------------
 Installation
 ------------
@@ -77,28 +79,3 @@ Automatically create parts from clips.
 .. code-block:: bash
 
     amix --parts_from_clips
-
--------------
-Configuration
--------------
-
-You can find the JSON schema here_.
-
-.. _here: https://github.com/artificialhoney/amix/blob/main/src/amix/amix.json
-
-
-A sample configuration looks like:
-
-.. code-block:: yaml
-
-    name: DnB
-    original_tempo: 180
-    parts:
-      - name: backbeat_part
-        bars: 16
-        clips:
-          - name: backbeat
-    mix:
-      - name: intro
-        parts:
-          - name: backbeat_part

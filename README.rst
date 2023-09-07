@@ -40,10 +40,6 @@ Make sure, to have **ffmpeg** installed.
 Usage
 -----
 
-I also uploaded my first results to SoundCloud_.
-
-.. _SoundCloud: https://soundcloud.com/honeymachine/sets/street-parade
-
 Please check first of all the help function.
 
 .. code-block:: bash

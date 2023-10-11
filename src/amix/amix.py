@@ -243,7 +243,7 @@ class Amix:
             diff = bars_part - bars_original
             if diff >= 0:
                 bars = bars_original
-                while bars == bars_original and bars > 1 or (bars_part % bars) != 0:
+                while bars == bars_original and bars > 1 and (bars_part % bars) != 0:
                     bars = bars - 1
 
             else:

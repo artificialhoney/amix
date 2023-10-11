@@ -64,12 +64,6 @@ Increase verbosity to also output the ``ffmpeg`` logging.
 
     amix -vv
 
-Use a ``jinja2`` template and supply data.
-
-.. code-block:: bash
-
-    amix templates/amix.yml.j2 --data "full=8" "half=4" "from=7.825" "tempo=0.538" "pitch=1.1" "original_tempo=180"
-
 Automatically create parts from clips.
 
 .. code-block:: bash

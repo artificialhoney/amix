@@ -329,7 +329,7 @@
           }
         }
       },
-      "required": ["name"],
+      "required": ["name", "parts"],
       "$$target": ["#/definitions/segment"]
     },
     "reference": {
